@@ -182,115 +182,108 @@ This is what enables:
   }
 }
 
-
-
-
-
 :root {
-    --bg: #0d1117;
-    --text: #00ffff;
-    --accent: #00ffff;
-    --error: #ff4d4d;
-  }
+  --bg: #0d1117;
+  --text: #00ffff;
+  --accent: #00ffff;
+  --error: #ff4d4d;
+}
 
-  body {
-    font-family: "Courier New", monospace;
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-  }
+body {
+  font-family: "Courier New", monospace;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
 
-  h1 {
-    font-size: 2rem;
-    margin: 0.3rem 0;
-    color: var(--accent);
-    text-shadow: 0 0 8px var(--accent);
-  }
+h1 {
+  font-size: 2rem;
+  margin: 0.3rem 0;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent);
+}
 
-  p {
-    font-size: 1rem;
-    color: #00ffff;
-    text-align: center;
-    max-width: 700px;
-    line-height: 1.5;
-  }
+p {
+  font-size: 1rem;
+  color: #00ffff;
+}
 
-  /* Typing Game */
-  #game {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
+/* Typing Game */
+#game {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
 
-  #command {
-    font-size: 1.1rem;
-    /*color: var(--accent);*/
-    color:#c39c54;
-    margin-bottom: 10px;
-  }
+#command {
+  font-size: 1.1rem;
+  /*color: var(--accent);*/
+  color:#c39c54;
+  margin-bottom: 10px;
+}
 
-  #input {
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--text);
-    padding: 6px 8px;
-    outline: none;
-    width: 260px;
-    text-align: center;
-  }
+#input {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--text);
+  padding: 6px 8px;
+  outline: none;
+  width: 260px;
+  text-align: center;
+}
 
-  #input::placeholder {
-    color: #146c6c;
-    font-size: 0.9rem;
-  }
+#input::placeholder {
+  color: #146c6c;
+  font-size: 0.9rem;
+}
 
-  /* Shake animation */
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
-  }
+/* Shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
 
-  .shake {
-    animation: shake 0.4s;
-  }
+.shake {
+  animation: shake 0.4s;
+}
 
-  #hint {
-    font-size: 0.85rem;
-    color: #c39c54;
-    margin-top: 6px;
-    font-style: italic;
-  }
+#hint {
+  font-size: 0.85rem;
+  color: #c39c54;
+  margin-top: 6px;
+  font-style: italic;
+}
 
-  #result {
-    height: 1.2em;
-    margin-top: 6px;
-  }
+#result {
+  height: 1.2em;
+  margin-top: 6px;
+}
 
-  .success { color: var(--accent); }
-  .fail { color: var(--error); }
+.success { color: var(--accent); }
+.fail { color: var(--error); }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 
-  footer {
-    margin-top: 2rem;
-    font-size: 0.9rem;
-    color: #00ffff;
-    text-align: center;
-  }
+footer {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #00ffff;
+  text-align: center;
+}
 
-  footer a {
-    color: #00ffff !important;
-    text-decoration: none;
-  }
+footer a {
+  color: #00ffff !important;
+  text-decoration: none;
+}
 
-  footer a:hover {
-    text-decoration: underline;
-  }
+footer a:hover {
+  text-decoration: underline;
+}
 
 
 /* Responsive Video Wrapper */
@@ -363,10 +356,21 @@ a:active {
 
 
 /* =========================
-   MAIN TEXT JUSTIFICATION
+   MAIN TEXT FORMATTING
 ========================= */
 
-main p {
+main p,
+main ol {
+  max-width: 700px;
+}
+
+main p,
+main li {
   text-align: justify;
   line-height: 1.7;
+}
+
+main ol {
+  box-sizing: border-box;
+  padding-left: 2rem;
 }

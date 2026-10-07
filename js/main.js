@@ -1,4 +1,4 @@
-  const commandResponses = {
+const commandResponses = {
     "system boot": "🖥️ Booting AI/ML/Web career career... welcome aboard!",
     "ping recruiter.com": "📡 Pinging recruiters... response received ✅",
     "find / -name job": "🔍 Searching jobs... AI/ML/Web opportunities found!",
