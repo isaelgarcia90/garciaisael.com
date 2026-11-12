@@ -2,10 +2,14 @@ import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import { smoother } from "../Navbar";
 
+let introStarted = false;
+
 export function initialFX() {
+  if (introStarted) return; // run only once
+  introStarted = true;
+  document.body.classList.add("intro-done"); // reveals landing texts, menu and icons (see index.css)
   document.body.style.overflowY = "auto";
   smoother.paused(false);
-  document.getElementsByTagName("main")[0].classList.add("main-active");
   gsap.to("body", {
     backgroundColor: "#0a0e17",
     duration: 0.5,

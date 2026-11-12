@@ -1,9 +1,10 @@
 import * as THREE from "three";
 import { RGBELoader } from "three-stdlib";
 import { gsap } from "gsap";
+import { getTheme, onThemeChange } from "../../../theme/theme";
 
 const setLighting = (scene: THREE.Scene) => {
-  const directionalLight = new THREE.DirectionalLight(0x5eead4, 0);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0);
   directionalLight.intensity = 0;
   directionalLight.position.set(-0.47, -0.32, -1);
   directionalLight.castShadow = true;
@@ -13,7 +14,9 @@ const setLighting = (scene: THREE.Scene) => {
   directionalLight.shadow.camera.far = 50;
   scene.add(directionalLight);
 
-  const pointLight = new THREE.PointLight(0x22d3ee, 0, 100, 3);
+  // Monitor light takes the accent color of the active color mode
+  const pointLight = new THREE.PointLight(getTheme().accent, 0, 100, 3);
+  onThemeChange((theme) => pointLight.color.set(theme.accent));
   pointLight.position.set(3, 12, 4);
   pointLight.castShadow = true;
   scene.add(pointLight);
