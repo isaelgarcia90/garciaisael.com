@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { THEMES } from "../theme/themes";
 import { applyTheme, getTheme, onThemeChange } from "../theme/theme";
+import { trackEvent } from "./utils/analytics";
 import "./styles/ThemeSwitcher.css";
 
 const ThemeSwitcher = () => {
@@ -44,6 +45,7 @@ const ThemeSwitcher = () => {
               className={`theme-option ${t.id === current.id ? "active" : ""}`}
               onClick={() => {
                 applyTheme(t.id);
+                trackEvent("theme_change", { theme: t.name });
                 setOpen(false);
               }}
             >
