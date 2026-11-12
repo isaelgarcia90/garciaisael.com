@@ -28,11 +28,14 @@ const Contact = () => {
               </a>
             </p>
             <h4>Education</h4>
-            <p>
-              M.Sc. Computer Science, Autonomous University of Guadalajara (UAG) — 2016 - 2018
-              <br />
-              B.S. Electronics and Communications Engineering, National Polytechnic Institute (IPN) — 2008 - 2012
-            </p>
+            <div className="contact-degree">
+              <p>M.Sc. Computer Science</p>
+              <span>Autonomous University of Guadalajara (UAG) · 2016 – 2018</span>
+            </div>
+            <div className="contact-degree">
+              <p>B.S. Electronics and Communications Engineering</p>
+              <span>National Polytechnic Institute (IPN) · 2008 – 2012</span>
+            </div>
           </div>
           <div className="contact-box">
             <h4>Social</h4>

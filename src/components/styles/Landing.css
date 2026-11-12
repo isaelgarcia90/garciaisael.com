@@ -391,3 +391,34 @@ h2.landing-info-h2 {
     font-size: 75px;
   }
 }
+
+/* ── Phones: smaller hero texts, name above the cap ── */
+@media screen and (max-width: 767px) {
+  .landing-intro {
+    top: 76px;
+  }
+  .landing-intro h2 {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+  }
+  .landing-intro h1 {
+    font-size: 20px;
+    line-height: 23px;
+    letter-spacing: 1.5px;
+  }
+  .landing-info {
+    bottom: 28px;
+  }
+  .landing-info h3 {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+  }
+  .landing-info h2 {
+    font-size: 24px;
+    line-height: 30px;
+    margin-left: 12px;
+  }
+  h2.landing-info-h2 {
+    font-size: 28px;
+  }
+}

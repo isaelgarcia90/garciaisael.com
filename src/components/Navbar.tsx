@@ -43,7 +43,7 @@ const Navbar = () => {
         if (!section) return;
         e.preventDefault();
         // On mobile, leave room for the fixed top bar
-        const offset = window.innerWidth < 768 ? "top 64px" : "top top";
+        const offset = window.innerWidth <= 1024 ? "top 64px" : "top top";
         smoother.scrollTo(section, true, offset);
       });
     });
@@ -83,6 +83,16 @@ const Navbar = () => {
             <li>
               <a data-href="#about" href="#about">
                 <HoverLinks text="ABOUT" />
+              </a>
+            </li>
+            <li>
+              <a data-href="#whatido" href="#whatido">
+                <HoverLinks text="WHAT I DO" />
+              </a>
+            </li>
+            <li>
+              <a data-href="#experience" href="#experience">
+                <HoverLinks text="EXPERIENCE" />
               </a>
             </li>
             <li>
