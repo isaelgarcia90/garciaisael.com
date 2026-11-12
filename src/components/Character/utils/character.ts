@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { DRACOLoader, GLTF, GLTFLoader } from "three-stdlib";
+import { DRACOLoader, GLTF, GLTFLoader, MeshoptDecoder } from "three-stdlib";
 import { setCharTimeline, setAllTimeline } from "../../utils/GsapScroll";
 import { decryptFile } from "./decrypt";
 import { asset } from "../../../assetVersion";
@@ -132,6 +132,8 @@ const setCharacter = (
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
+  // The model is compressed with meshopt (EXT_meshopt_compression); the decoder is built in, no extra download
+  loader.setMeshoptDecoder(MeshoptDecoder());
 
   const loadCharacter = () => {
     return new Promise<GLTF | null>(async (resolve, reject) => {
