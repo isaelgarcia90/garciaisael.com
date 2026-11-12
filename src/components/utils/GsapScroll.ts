@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import gsap from "gsap";
+import { getTheme, lightTint, onThemeChange } from "../../theme/theme";
 
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
@@ -51,7 +52,8 @@ export function setCharTimeline(
     if (object.name === "screenlight") {
       object.material.transparent = true;
       object.material.opacity = 0;
-      object.material.emissive.set("#B0F5EA");
+      object.material.emissive.set(lightTint(getTheme())); // screen glow follows the color mode
+      onThemeChange((theme) => object.material.emissive.set(lightTint(theme)));
       gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
         emissiveIntensity: () => intensity * 8,
         duration: () => Math.random() * 0.6,

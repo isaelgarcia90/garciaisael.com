@@ -9,6 +9,7 @@ import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
+import { initialFX } from "./utils/initialFX";
 
 const TechStack = lazy(() => import("./TechStack"));
 
@@ -28,6 +29,13 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       window.removeEventListener("resize", resizeHandler);
     };
   }, [isDesktopView]);
+
+  // The page intro (texts, menu, scroll) starts from Scene.tsx when the character lights turn on.
+  // Fallback: if the model fails to load, start it anyway so the page never stays hidden.
+  useEffect(() => {
+    const fallback = setTimeout(() => initialFX(), 15000);
+    return () => clearTimeout(fallback);
+  }, []);
 
   return (
     <div className="container-main">

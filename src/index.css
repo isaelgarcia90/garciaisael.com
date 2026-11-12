@@ -18,7 +18,16 @@
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  --accentColor: #00ffff;
+  /* Color mode variables (default: Kernel Panic). src/theme/theme.ts overrides them per mode. */
+  --accentColor: #ff3b3b;
+  --accentSoft: #ff7676;
+  --accentLight: #ffbaba;
+  --accentMid: #e61e1e;
+  --accentDeep: #CC0000;
+  --accentDark: #7a0202;
+  --accentMuted: #a83232;
+  --accentRgb: 255, 59, 59;
+  --accentDeepRgb: 204, 0, 0;
   --backgroundColor: #0a0e17;
   --vh: 100vh;
   --vh: 100svh;
@@ -134,4 +143,13 @@ body {
   .techstack h2 {
     font-size: 40px;
   }
+}
+
+/* Hidden while the character silhouette shows; initialFX adds .intro-done to <body> */
+body:not(.intro-done) .landing-intro,
+body:not(.intro-done) .landing-info,
+body:not(.intro-done) .header,
+body:not(.intro-done) .icons-section,
+body:not(.intro-done) .nav-fade {
+  visibility: hidden;
 }

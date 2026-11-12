@@ -12,6 +12,7 @@ import {
 } from "./utils/mouseUtils";
 import setAnimations from "./utils/animationUtils";
 import { setProgress } from "../Loading";
+import { initialFX } from "../utils/initialFX";
 
 const Scene = () => {
   const canvasDiv = useRef<HTMLDivElement | null>(null);
@@ -67,7 +68,8 @@ const Scene = () => {
             setTimeout(() => {
               light.turnOnLights();
               animations.startIntro();
-            }, 2500);
+              initialFX(); // texts, menu and scroll appear when the lights turn on
+            }, 3000);
           });
           window.addEventListener("resize", () =>
             handleResize(renderer, camera, canvasDiv, character)

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
+import ThemeSwitcher from "./ThemeSwitcher";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import "./styles/Navbar.css";
@@ -42,9 +43,12 @@ const Navbar = () => {
   return (
     <>
       <div className="header">
-        <a href="/#" className="navbar-title" data-cursor="disable">
-          IG
-        </a>
+        <div className="header-left">
+          <a href="/#" className="navbar-title" data-cursor="disable">
+            IG
+          </a>
+          <ThemeSwitcher />
+        </div>
         <a
           href="https://www.linkedin.com/in/isaelgarcia90"
           className="navbar-connect"
@@ -54,23 +58,25 @@ const Navbar = () => {
         >
           linkedin.com/in/isaelgarcia90
         </a>
-        <ul>
-          <li>
-            <a data-href="#about" href="#about">
-              <HoverLinks text="ABOUT" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#work" href="#work">
-              <HoverLinks text="MY WORK" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#contact" href="#contact">
-              <HoverLinks text="CONTACT" />
-            </a>
-          </li>
-        </ul>
+        <div className="header-right">
+          <ul>
+            <li>
+              <a data-href="#about" href="#about">
+                <HoverLinks text="ABOUT" />
+              </a>
+            </li>
+            <li>
+              <a data-href="#work" href="#work">
+                <HoverLinks text="MY WORK" />
+              </a>
+            </li>
+            <li>
+              <a data-href="#contact" href="#contact">
+                <HoverLinks text="CONTACT" />
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div className="landing-circle1"></div>

@@ -56,7 +56,7 @@
   font-size: 15px;
   line-height: 15px;
   font-weight: 600;
-  color: #2f92a9;
+  color: var(--accentMuted);
   cursor: pointer;
   transition: 0.5s;
   transform-origin: left bottom;
