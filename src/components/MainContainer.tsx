@@ -9,6 +9,7 @@ import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
+import { onWidthResize } from "./utils/widthResize";
 import { initialFX } from "./utils/initialFX";
 import { notifyVisit, trackSectionViews } from "./utils/analytics";
 import { MdScreenRotation } from "react-icons/md";
@@ -48,10 +49,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       setIsDesktopView(window.innerWidth > 1024);
     };
     resizeHandler();
-    window.addEventListener("resize", resizeHandler);
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
+    return onWidthResize(resizeHandler);
   }, [isDesktopView]);
 
   // Google Analytics: report which sections each visitor reaches

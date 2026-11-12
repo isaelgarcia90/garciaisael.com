@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { setCharTimeline, setAllTimeline } from "../../utils/GsapScroll";
+import setSplitText from "../../utils/splitText";
 
 export default function handleResize(
   renderer: THREE.WebGLRenderer,
@@ -23,4 +24,5 @@ export default function handleResize(
   });
   setCharTimeline(character, camera);
   setAllTimeline();
+  setSplitText(); // the text reveals were killed above, rebuild them too
 }

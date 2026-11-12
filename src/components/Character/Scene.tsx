@@ -4,6 +4,7 @@ import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
 import { useLoading } from "../../context/LoadingProvider";
 import handleResize from "./utils/resizeUtils";
+import { onWidthResize } from "../utils/widthResize";
 import {
   handleMouseMove,
   handleTouchEnd,
@@ -20,7 +21,7 @@ const Scene = () => {
   const sceneRef = useRef(new THREE.Scene());
   const { setLoading } = useLoading();
 
-  const [character, setChar] = useState<THREE.Object3D | null>(null);
+  const [, setChar] = useState<THREE.Object3D | null>(null);
   useEffect(() => {
     if (canvasDiv.current) {
       let rect = canvasDiv.current.getBoundingClientRect();
@@ -53,6 +54,7 @@ const Scene = () => {
 
       const clock = new THREE.Clock();
       let resizeTimer: number | undefined;
+      let stopResize = () => {};
 
       // Keep the 3D view exactly the size of its box, whatever the screen or
       // orientation does (tablets rotating, browser bars showing/hiding)
@@ -88,7 +90,7 @@ const Scene = () => {
           });
           // Rebuild the scroll animations once the size settles (rotation fires
           // several resize events while the browser is still changing layout)
-          window.addEventListener("resize", () => {
+          stopResize = onWidthResize(() => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(
               () => handleResize(renderer, camera, canvasDiv, character),
@@ -173,9 +175,7 @@ const Scene = () => {
         visibility.disconnect();
         scene.clear();
         renderer.dispose();
-        window.removeEventListener("resize", () =>
-          handleResize(renderer, camera, canvasDiv, character!)
-        );
+        stopResize();
         if (canvasDiv.current) {
           canvasDiv.current.removeChild(renderer.domElement);
         }

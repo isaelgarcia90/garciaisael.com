@@ -579,3 +579,72 @@ body .carousel-arrow-right {
     height: calc(100vh - var(--navH, 90px));
   }
 }
+
+/* ── Tablets in landscape and other touch screens wider than 1024px:
+   What I Do cards always open (no hover on touch), smaller and pushed to the
+   right so they never cover the character sitting at the desk ── */
+@media only screen and (min-width: 1025px) and (hover: none),
+  only screen and (min-width: 1025px) and (pointer: coarse) {
+  body .whatIDO .what-box:last-child {
+    justify-content: flex-end;
+    padding-right: 2vw;
+    box-sizing: border-box;
+  }
+  body .what-box-in {
+    height: auto;
+    margin-left: 0;
+    width: 300px;
+    gap: 10px;
+  }
+  body .what-border1,
+  body .what-border2,
+  body .what-corner,
+  body .what-arrow,
+  body .what-content::before,
+  body .what-content::after {
+    display: none;
+  }
+  body .what-content,
+  body .what-content-active,
+  body .what-content.what-sibling {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 14px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(10, 14, 23, 0.55);
+  }
+  body .what-content-in {
+    opacity: 1;
+    animation: none;
+  }
+  body .what-content h3 {
+    font-size: 18px;
+  }
+  body .what-content h4 {
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  body .what-content p {
+    font-size: 12px;
+    line-height: 17px;
+    margin: 6px 0;
+  }
+  body .what-content h5 {
+    font-size: 11px;
+    margin: 8px 0 6px;
+    opacity: 0.6;
+  }
+  body .what-content h5,
+  body .what-content-flex {
+    opacity: 1;
+  }
+  body .what-content-flex {
+    gap: 6px;
+  }
+  body .what-tags {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+}

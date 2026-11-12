@@ -7,6 +7,7 @@ import { TbNotes } from "react-icons/tb";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import "./styles/Navbar.css";
+import { onWidthResize } from "./utils/widthResize";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
@@ -107,9 +108,7 @@ const Navbar = () => {
         smoother.scrollTo(section, true, offset);
       });
     });
-    window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
-    });
+    onWidthResize(() => ScrollSmoother.refresh(true));
   }, []);
   return (
     <>
