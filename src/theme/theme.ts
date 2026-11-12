@@ -31,7 +31,8 @@ export const getTheme = () => current;
 
 export const getSavedThemeId = (): ThemeId => {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    let saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === "cloud") saved = "sky"; // mode renamed from Cloud to Sky
     if (findTheme(saved)) return saved as ThemeId;
   } catch {
     // storage not available: use the default
