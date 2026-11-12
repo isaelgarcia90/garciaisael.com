@@ -29,4 +29,4 @@ backup/
 # Screenshots & Source PDF
 Screenshot*.png
 src/*.pdf
-._*
+._*blender/
