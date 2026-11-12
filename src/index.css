@@ -18,16 +18,16 @@
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  /* Color mode variables (default: Kernel Panic). src/theme/theme.ts overrides them per mode. */
-  --accentColor: #ff3b3b;
-  --accentSoft: #ff7676;
-  --accentLight: #ffbaba;
-  --accentMid: #e61e1e;
-  --accentDeep: #CC0000;
-  --accentDark: #7a0202;
-  --accentMuted: #a83232;
-  --accentRgb: 255, 59, 59;
-  --accentDeepRgb: 204, 0, 0;
+  /* Color mode variables (default: Galaxy). src/theme/theme.ts overrides them per mode. */
+  --accentColor: #a78bfa;
+  --accentSoft: #c1aefc;
+  --accentLight: #e0d6fd;
+  --accentMid: #9263f4;
+  --accentDeep: #7c3aed;
+  --accentDark: #4c1d95;
+  --accentMuted: #7c6aa8;
+  --accentRgb: 167, 139, 250;
+  --accentDeepRgb: 124, 58, 237;
   --backgroundColor: #0a0e17;
   --vh: 100vh;
   --vh: 100svh;
