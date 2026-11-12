@@ -3,6 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { MdClose, MdMenu } from "react-icons/md";
+import { TbNotes } from "react-icons/tb";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import "./styles/Navbar.css";
@@ -71,13 +72,13 @@ const Navbar = () => {
           <ThemeSwitcher />
         </div>
         <a
-          href="https://www.linkedin.com/in/isaelgarcia90"
-          className="navbar-connect"
+          href="/Isael_Garcia__CV.pdf"
+          className="navbar-resume"
           data-cursor="disable"
           target="_blank"
           rel="noreferrer"
         >
-          linkedin.com/in/isaelgarcia90
+          RESUME <TbNotes />
         </a>
         <div className="header-right">
           <button
@@ -92,7 +93,7 @@ const Navbar = () => {
           <ul onClick={() => setMenuOpen(false)}>
             <li>
               <a data-href="#about" href="#about">
-                <HoverLinks text="About" />
+                <HoverLinks text="About Me" />
               </a>
             </li>
             <li>
@@ -113,11 +114,6 @@ const Navbar = () => {
             <li>
               <a data-href="#contact" href="#contact">
                 <HoverLinks text="Contact" />
-              </a>
-            </li>
-            <li className="menu-resume">
-              <a href="/Isael_Garcia__CV.pdf" target="_blank" rel="noreferrer">
-                Resume
               </a>
             </li>
           </ul>

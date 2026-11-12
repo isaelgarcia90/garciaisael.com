@@ -30,18 +30,26 @@
   font-weight: 600;
   cursor: pointer;
 }
-.navbar-connect {
-  position: absolute;
-  display: none;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+/* Resume: always visible, centered between the theme menu and the section menu */
+.navbar-resume {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
   font-size: 15px;
-  letter-spacing: 1px;
-  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 3px;
+  font-weight: 600;
+  color: var(--accentColor);
+  transition: color 0.3s ease;
 }
-.menu-toggle,
-.header ul li.menu-resume {
+.navbar-resume svg {
+  font-size: 1.2em;
+}
+.navbar-resume:hover {
+  color: #fff;
+}
+.menu-toggle {
   display: none;
 }
 .navbar-title {
@@ -65,11 +73,6 @@
     font-size: 16px;
   }
 }
-@media only screen and (min-width: 1800px) {
-  .navbar-connect {
-    display: block;
-  }
-}
 @media only screen and (min-width: 1200px) {
   .header {
     padding: 35px 0px;
@@ -78,7 +81,7 @@
     column-gap: 36px;
     font-size: 15px;
   }
-  .navbar-connect {
+  .navbar-resume {
     font-size: 16px;
   }
   .navbar-title {
@@ -149,10 +152,8 @@
     color: #eae5ec;
     letter-spacing: 2px;
   }
-  .header ul li.menu-resume {
-    display: block;
-  }
-  .header ul li.menu-resume a {
-    color: var(--accentColor);
+  .navbar-resume {
+    font-size: 12px;
+    letter-spacing: 2px;
   }
 }
