@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import ThemeSwitcher from "./ThemeSwitcher";
+import { MdClose, MdMenu } from "react-icons/md";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import "./styles/Navbar.css";
@@ -10,6 +11,16 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Mobile menu: close on scroll
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = () => setMenuOpen(false);
+    window.addEventListener("scroll", close, { passive: true });
+    return () => window.removeEventListener("scroll", close);
+  }, [menuOpen]);
+
   useEffect(() => {
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
@@ -28,12 +39,12 @@ const Navbar = () => {
     links.forEach((elem) => {
       let element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
-        if (window.innerWidth > 1024) {
-          e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
-        }
+        const section = element.getAttribute("data-href");
+        if (!section) return;
+        e.preventDefault();
+        // On mobile, leave room for the fixed top bar
+        const offset = window.innerWidth < 768 ? "top 64px" : "top top";
+        smoother.scrollTo(section, true, offset);
       });
     });
     window.addEventListener("resize", () => {
@@ -42,7 +53,7 @@ const Navbar = () => {
   }, []);
   return (
     <>
-      <div className="header">
+      <div className={`header ${menuOpen ? "menu-open" : ""}`}>
         <div className="header-left">
           <a href="/#" className="navbar-title" data-cursor="disable">
             IG
@@ -59,7 +70,16 @@ const Navbar = () => {
           linkedin.com/in/isaelgarcia90
         </a>
         <div className="header-right">
-          <ul>
+          <button
+            type="button"
+            className="menu-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <MdClose /> : <MdMenu />}
+          </button>
+          <ul onClick={() => setMenuOpen(false)}>
             <li>
               <a data-href="#about" href="#about">
                 <HoverLinks text="ABOUT" />
@@ -73,6 +93,11 @@ const Navbar = () => {
             <li>
               <a data-href="#contact" href="#contact">
                 <HoverLinks text="CONTACT" />
+              </a>
+            </li>
+            <li className="menu-resume">
+              <a href="/Isael_Garcia__CV.pdf" target="_blank" rel="noreferrer">
+                RESUME
               </a>
             </li>
           </ul>

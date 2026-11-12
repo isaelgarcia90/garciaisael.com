@@ -346,3 +346,34 @@
     max-height: 250px;
   }
 }
+/* ── Mobile: arrows sit next to the dots, swipe to change project ── */
+@media only screen and (max-width: 1025px) {
+  .carousel-track-container {
+    touch-action: pan-y;
+  }
+  .carousel-dots {
+    min-height: 40px;
+    align-items: center;
+  }
+  .carousel-arrow {
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
+  .carousel-arrow-left {
+    left: 0;
+  }
+  .carousel-arrow-right {
+    right: 0;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .carousel-details h4 {
+    font-size: 22px;
+  }
+  .carousel-category,
+  .carousel-tools p {
+    font-size: 15px;
+    line-height: 23px;
+  }
+}

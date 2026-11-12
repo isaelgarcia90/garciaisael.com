@@ -242,3 +242,34 @@
     justify-content: left;
   }
 }
+/* ── Mobile: one column, year above the role ── */
+@media only screen and (max-width: 600px) {
+  .career-info-in {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .career-info-in > h4,
+  .career-info-in > h5 {
+    order: -1;
+    margin: 0;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 2px;
+    color: var(--accentColor);
+  }
+  .career-info h4 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .career-info h5 {
+    font-size: 16px;
+    margin: 6px 0px 0px;
+  }
+  .career-info-box {
+    margin-bottom: 50px;
+  }
+  .career-info-box p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
