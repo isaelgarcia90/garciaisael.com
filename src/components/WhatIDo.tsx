@@ -27,12 +27,7 @@ const WhatIDo = () => {
   return (
     <div className="whatIDO" id="whatido">
       <div className="what-box">
-        <h2 className="title">
-          W<span className="hat-h2">HAT</span>
-          <div>
-            I<span className="do-h2"> DO</span>
-          </div>
-        </h2>
+        <h2 className="title section-title">What I Do</h2>
       </div>
       <div className="what-box">
         <div className="what-box-in">
@@ -53,7 +48,7 @@ const WhatIDo = () => {
             </div>
             <div className="what-corner"></div>
             <div className="what-content-in">
-              <h3>SOFTWARE ENGINEERING</h3>
+              <h3>Software Engineering</h3>
               <h4>End-to-End Software Delivery</h4>
               <p>
                 I help teams design, integrate, test, troubleshoot, and improve software systems across
@@ -83,7 +78,7 @@ const WhatIDo = () => {
             </div>
             <div className="what-corner"></div>
             <div className="what-content-in">
-              <h3>ARTIFICIAL INTELLIGENCE</h3>
+              <h3>Artificial Intelligence</h3>
               <h4>Applied AI &amp; Automation</h4>
               <p>
                 I build practical AI-powered automation solutions for customer service,

@@ -5,7 +5,7 @@ const Contact = () => {
   return (
     <div className="contact-section section-container" id="contact">
       <div className="contact-container">
-        <h3>Contact</h3>
+        <h3 className="section-title">Contact</h3>
         <div className="contact-flex">
           <div className="contact-box">
             <h4>Connect</h4>
@@ -30,11 +30,13 @@ const Contact = () => {
             <h4>Education</h4>
             <div className="contact-degree">
               <p>M.Sc. Computer Science</p>
-              <span>Autonomous University of Guadalajara (UAG) · 2016 – 2018</span>
+              <span>Autonomous University of Guadalajara (UAG)</span>
+              <span className="contact-years">2016 – 2018</span>
             </div>
             <div className="contact-degree">
               <p>B.S. Electronics and Communications Engineering</p>
-              <span>National Polytechnic Institute (IPN) · 2008 – 2012</span>
+              <span>National Polytechnic Institute (IPN)</span>
+              <span className="contact-years">2008 – 2012</span>
             </div>
           </div>
           <div className="contact-box">

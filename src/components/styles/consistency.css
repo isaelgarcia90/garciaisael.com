@@ -1,0 +1,307 @@
+/*
+  One look for the whole site.
+  - Section titles: like "About Me" (solid theme color, mixed case).
+  - Phones (<= 767px): one type scale for every section.
+    Titles 24px · item titles 16px · body 14px · meta/labels 12px · tags 11px
+*/
+
+/* ── Section titles (all screen sizes) ── */
+body .section-title,
+body .about-me h3.section-title,
+body .what-box h2.section-title,
+body .career-section h2.section-title,
+body .work-section h2.section-title,
+body .contact-section h3.section-title {
+  font-family: "Geist", sans-serif;
+  font-size: 40px;
+  line-height: 1.2;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 1px;
+  text-transform: none;
+  color: var(--accentColor);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-align: left;
+}
+@media only screen and (max-width: 1200px) {
+  body .section-title,
+  body .about-me h3.section-title,
+  body .what-box h2.section-title,
+  body .career-section h2.section-title,
+  body .work-section h2.section-title,
+  body .contact-section h3.section-title {
+    font-size: 32px;
+  }
+}
+
+/* ── Dropdown menus: same font as the color mode menu ── */
+body .theme-switcher-button {
+  text-transform: none;
+  letter-spacing: 1px;
+}
+body .theme-option {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+body .header ul li,
+body .header ul li a {
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+/* ───────────────────────── Phones ───────────────────────── */
+@media only screen and (max-width: 767px) {
+  /* Titles */
+  body .section-title,
+  body .about-me h3.section-title,
+  body .what-box h2.section-title,
+  body .career-section h2.section-title,
+  body .work-section h2.section-title,
+  body .contact-section h3.section-title {
+    font-size: 24px;
+    margin: 0 0 18px;
+    padding: 0;
+  }
+
+  /* Header and menus */
+  body .theme-switcher-name,
+  body .theme-switcher-chevron {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  body .theme-switcher-menu {
+    min-width: 170px;
+  }
+  body .theme-option {
+    padding: 8px 10px;
+  }
+  body .header.menu-open ul {
+    row-gap: 4px;
+    min-width: 150px;
+    padding: 6px;
+    align-items: stretch;
+    font-size: 12px;
+    background: #111522;
+    border: 1px solid #262b3a;
+    border-radius: 12px;
+  }
+  body .header.menu-open ul li {
+    letter-spacing: 0.5px;
+    color: #d6d6dc;
+  }
+  body .header.menu-open ul li a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Every section starts below the bar and fills the screen, so jumping
+     from the menu shows one section at a time */
+  body .about-section,
+  body .whatIDO,
+  body .career-section,
+  body .work-section,
+  body .contact-section {
+    min-height: calc(100svh - 64px);
+    box-sizing: border-box;
+    padding-top: 28px;
+    padding-bottom: 28px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  /* Shared text styles */
+  body .about-me p,
+  body .what-content p,
+  body .career-info-box p,
+  body .carousel-category,
+  body .carousel-tools p {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 300;
+    letter-spacing: 0.1px;
+    color: #d4d0d8;
+    text-align: justify;
+    hyphens: auto;
+  }
+  body .what-content h3,
+  body .career-info .career-role h4,
+  body .carousel-details h4,
+  body .contact-flex .contact-degree p {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: #eae5ec;
+  }
+  body .what-content h4,
+  body .what-content h5,
+  body .career-info .career-role h5,
+  body .career-info-in > h4,
+  body .career-info-in > h5,
+  body .carousel-tools .tools-label,
+  body .carousel-number h3,
+  body .contact-flex h4,
+  body .contact-degree span {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-transform: none;
+  }
+
+  /* About */
+  body .about-section {
+    align-items: flex-start;
+  }
+  body .about-me {
+    padding: 0;
+  }
+  body .about-me p {
+    margin: 0;
+  }
+  body .about-me p > br:first-child {
+    display: none;
+  }
+
+  /* What I Do: whole section fits one screen */
+  body .whatIDO {
+    padding-top: 28px;
+  }
+  body .what-box h2.section-title {
+    margin-top: 0;
+  }
+  body .what-box-in {
+    gap: 12px;
+  }
+  body .what-content,
+  body .what-noTouch:hover,
+  body .what-content-active,
+  body .what-content.what-sibling,
+  body .what-box-in:hover .what-noTouch:not(:hover),
+  body .what-noTouch:hover ~ .what-content {
+    padding: 14px 16px;
+  }
+  body .what-content h4 {
+    margin-top: 2px;
+    opacity: 0.6;
+  }
+  body .what-content p {
+    margin: 8px 0;
+  }
+  body .what-content h5 {
+    margin: 8px 0 6px;
+    opacity: 0.6;
+  }
+  body .what-content-flex {
+    gap: 6px;
+  }
+  body .what-tags {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  /* Experience */
+  body .career-section .career-container {
+    width: 100%;
+  }
+  body .career-info-in > h4,
+  body .career-info-in > h5 {
+    color: var(--accentColor);
+  }
+  body .career-info .career-role h5 {
+    margin: 2px 0 0;
+    color: var(--accentColor);
+  }
+  body .career-info-box {
+    margin-bottom: 28px;
+    gap: 6px;
+  }
+
+  /* My Work: description and preview fit one screen */
+  body .carousel-slide {
+    padding: 10px 0;
+  }
+  body .carousel-content {
+    gap: 12px;
+  }
+  body .carousel-number h3 {
+    opacity: 0.5;
+    margin-top: 2px;
+  }
+  body .carousel-details {
+    gap: 4px;
+  }
+  body .carousel-tools {
+    margin-top: 4px;
+  }
+  body .carousel-tools .tools-label {
+    opacity: 0.6;
+  }
+  body .carousel-tools p {
+    margin-top: 2px;
+  }
+  body .carousel-category,
+  body .carousel-tools p {
+    line-height: 20px;
+  }
+  body .work-image img {
+    max-height: 130px;
+  }
+  body .carousel-dots {
+    margin-top: 12px;
+  }
+
+  /* Contact */
+  body .contact-container {
+    width: 100%;
+  }
+  body .contact-flex {
+    gap: 8px;
+  }
+  body .contact-flex h4 {
+    margin-top: 16px;
+    opacity: 0.6;
+  }
+  body .contact-flex p,
+  body .contact-flex p a {
+    font-size: 14px;
+    line-height: 22px;
+    margin: 2px 0 0;
+  }
+  body .contact-degree {
+    margin-top: 8px;
+  }
+  body .contact-degree span {
+    display: block;
+    opacity: 0.6;
+    margin: 0;
+  }
+  body .contact-degree span.contact-years {
+    color: var(--accentColor);
+    opacity: 1;
+  }
+  body a.contact-social {
+    font-size: 14px;
+    padding: 8px 0;
+  }
+  body .contact-box h2 {
+    font-size: 14px;
+  }
+  body .contact-box h5 {
+    font-size: 12px;
+  }
+
+  /* Hero: name block centered (left-aligned lines), title above the chest */
+  body .landing-intro {
+    left: 0;
+    right: 0;
+    width: fit-content;
+    margin: 0 auto;
+  }
+  body .landing-info {
+    bottom: 90px;
+  }
+}

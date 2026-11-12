@@ -13,7 +13,7 @@ const projects = [
     <>
       <strong>Evolving Toward:</strong> Multi-Agent Sales & Customer Service Platform.
       <br/>
-      Combining LLMs, RAG, specialized AI Agents, and n8n workflows to handle producto inquiries, capture customer requirements, initiate quotation requests, and automate sales follow-ups.
+      Combining LLMs, RAG, specialized AI Agents, and n8n workflows to handle product inquiries, capture customer requirements, initiate quotation requests, and automate sales follow-ups.
       <br /><br />
       <strong>Initial Version:</strong> Lovable, React, TypeScript, Formspree, Namecheap, Vercel, Chatbot, Lead Capture, Catalog Downloads, WhatsApp Integration.
     </>,
@@ -76,9 +76,7 @@ const Work = () => {
   return (
     <div className="work-section" id="work">
       <div className="work-container section-container">
-        <h2>
-          My <span>Work</span>
-        </h2>
+        <h2 className="section-title">My Work</h2>
 
         <div className="carousel-wrapper">
           <button

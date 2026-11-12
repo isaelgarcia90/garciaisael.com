@@ -13,6 +13,16 @@ export let smoother: ScrollSmoother;
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Only one dropdown open at a time (section menu vs. color mode menu)
+  useEffect(() => {
+    if (menuOpen) window.dispatchEvent(new CustomEvent("dropdownopen", { detail: "nav" }));
+    const onOther = (e: Event) => {
+      if ((e as CustomEvent<string>).detail !== "nav") setMenuOpen(false);
+    };
+    window.addEventListener("dropdownopen", onOther);
+    return () => window.removeEventListener("dropdownopen", onOther);
+  }, [menuOpen]);
+
   // Mobile menu: close on scroll
   useEffect(() => {
     if (!menuOpen) return;
@@ -82,32 +92,32 @@ const Navbar = () => {
           <ul onClick={() => setMenuOpen(false)}>
             <li>
               <a data-href="#about" href="#about">
-                <HoverLinks text="ABOUT" />
+                <HoverLinks text="About" />
               </a>
             </li>
             <li>
               <a data-href="#whatido" href="#whatido">
-                <HoverLinks text="WHAT I DO" />
+                <HoverLinks text="What I Do" />
               </a>
             </li>
             <li>
               <a data-href="#experience" href="#experience">
-                <HoverLinks text="EXPERIENCE" />
+                <HoverLinks text="Experience" />
               </a>
             </li>
             <li>
               <a data-href="#work" href="#work">
-                <HoverLinks text="MY WORK" />
+                <HoverLinks text="My Work" />
               </a>
             </li>
             <li>
               <a data-href="#contact" href="#contact">
-                <HoverLinks text="CONTACT" />
+                <HoverLinks text="Contact" />
               </a>
             </li>
             <li className="menu-resume">
               <a href="/Isael_Garcia__CV.pdf" target="_blank" rel="noreferrer">
-                RESUME
+                Resume
               </a>
             </li>
           </ul>

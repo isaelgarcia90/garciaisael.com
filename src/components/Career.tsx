@@ -4,9 +4,7 @@ const Career = () => {
   return (
     <div className="career-section section-container" id="experience">
       <div className="career-container">
-        <h2>          
-          Experience
-        </h2>
+        <h2 className="section-title">Experience</h2>
         <div className="career-info">
 
           {/* Independent AI Engineer */}
@@ -19,7 +17,7 @@ const Career = () => {
                 <h4>Independent AI Engineer</h4>
                 <h5>Applied AI · AI Agents · Business Automation · Cloud</h5>
               </div>
-              <h4>NOW</h4>
+              <h4>Now</h4>
             </div>
             <p>
             Building AI-powered software and business automation solutions using LLMs, RAG,
