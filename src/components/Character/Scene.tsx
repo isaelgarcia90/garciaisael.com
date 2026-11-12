@@ -33,7 +33,9 @@ const Scene = () => {
         antialias: true,
       });
       renderer.setSize(container.width, container.height);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      // Phones report 3x pixel density; 1.5x looks the same and draws far fewer pixels
+      const maxDpr = window.innerWidth <= 1024 ? 1.5 : 2;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
       canvasDiv.current.appendChild(renderer.domElement);
@@ -84,16 +86,19 @@ const Scene = () => {
         handleMouseMove(event, (x, y) => (mouse = { x, y }));
       };
       let debounce: number | undefined;
-      const onTouchStart = (event: TouchEvent) => {
-        const element = event.target as HTMLElement;
-        debounce = setTimeout(() => {
-          element?.addEventListener("touchmove", (e: TouchEvent) =>
-            handleTouchMove(e, (x, y) => (mouse = { x, y }))
-          );
-        }, 200);
+      // Follow the finger only after a short hold (one listener, not one per touch)
+      let followTouch = false;
+      const onTouchStart = () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => (followTouch = true), 200);
+      };
+      const onTouchMove = (e: TouchEvent) => {
+        if (followTouch) handleTouchMove(e, (x, y) => (mouse = { x, y }));
       };
 
       const onTouchEnd = () => {
+        clearTimeout(debounce);
+        followTouch = false;
         handleTouchEnd((x, y, interpolationX, interpolationY) => {
           mouse = { x, y };
           interpolation = { x: interpolationX, y: interpolationY };
@@ -105,11 +110,22 @@ const Scene = () => {
       });
       const landingDiv = document.getElementById("landingDiv");
       if (landingDiv) {
-        landingDiv.addEventListener("touchstart", onTouchStart);
+        landingDiv.addEventListener("touchstart", onTouchStart, { passive: true });
+        landingDiv.addEventListener("touchmove", onTouchMove, { passive: true });
         landingDiv.addEventListener("touchend", onTouchEnd);
       }
+
+      // Stop drawing the 3D scene while it is off screen
+      let onScreen = true;
+      const visibility = new IntersectionObserver(([entry]) => {
+        onScreen = entry.isIntersecting;
+      });
+      visibility.observe(canvasDiv.current);
+      let frame = 0;
       const animate = () => {
-        requestAnimationFrame(animate);
+        frame = requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+        if (!onScreen || document.hidden) return;
         if (headBone) {
           handleHeadRotation(
             headBone,
@@ -121,7 +137,6 @@ const Scene = () => {
           );
           light.setPointLight(screenLight);
         }
-        const delta = clock.getDelta();
         if (mixer) {
           mixer.update(delta);
         }
@@ -130,6 +145,8 @@ const Scene = () => {
       animate();
       return () => {
         clearTimeout(debounce);
+        cancelAnimationFrame(frame);
+        visibility.disconnect();
         scene.clear();
         renderer.dispose();
         window.removeEventListener("resize", () =>
@@ -141,6 +158,7 @@ const Scene = () => {
         if (landingDiv) {
           document.removeEventListener("mousemove", onMouseMove);
           landingDiv.removeEventListener("touchstart", onTouchStart);
+          landingDiv.removeEventListener("touchmove", onTouchMove);
           landingDiv.removeEventListener("touchend", onTouchEnd);
         }
       };

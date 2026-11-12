@@ -163,3 +163,21 @@ a.contact-social {
     font-size: 14px;
   }
 }
+
+/* Connect: social links with their usernames */
+a.contact-social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+a.contact-social .contact-handle {
+  font-size: 0.65em;
+  opacity: 0.6;
+}
+a.contact-social svg {
+  margin-left: auto;
+}
+.contact-box a.contact-social + h4 {
+  margin-top: 36px;
+}

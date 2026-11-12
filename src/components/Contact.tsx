@@ -9,24 +9,33 @@ const Contact = () => {
         <div className="contact-flex">
           <div className="contact-box">
             <h4>Connect</h4>
-            <p>
-              <a
-                href="https://www.linkedin.com/in/isaelgarcia90"
-                target="_blank"
-                rel="noreferrer"
-                data-cursor="disable"
-              >
-                LinkedIn — isaelgarcia90
-              </a>
-            </p>
-            <p>
-              <a
-                href="mailto:isael.garcia_90@hotmail.com"
-                data-cursor="disable"
-              >
-                isael.garcia_90@hotmail.com
-              </a>
-            </p>
+            <a
+              href="https://www.linkedin.com/in/isaelgarcia90"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              LinkedIn <span className="contact-handle">@isaelgarcia90</span> <MdArrowOutward />
+            </a>
+            <a
+              href="https://github.com/isaelgarcia90"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              GitHub <span className="contact-handle">@isaelgarcia90</span> <MdArrowOutward />
+            </a>
+            <a
+              href="https://www.instagram.com/isaelgarcia.ia"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              Instagram <span className="contact-handle">@isaelgarcia.ia</span> <MdArrowOutward />
+            </a>
             <h4>Education</h4>
             <div className="contact-degree">
               <p>M.Sc. Computer Science</p>
@@ -38,36 +47,6 @@ const Contact = () => {
               <span>National Polytechnic Institute (IPN)</span>
               <span className="contact-years">2008 – 2012</span>
             </div>
-          </div>
-          <div className="contact-box">
-            <h4>Social</h4>
-            <a
-              href="https://www.linkedin.com/in/isaelgarcia90"
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              LinkedIn <MdArrowOutward />
-            </a>
-            <a
-              href="https://github.com/isaelgarcia90"
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              GitHub <MdArrowOutward />
-            </a>
-            <a
-              href="https://www.instagram.com/isaelgarcia.ia"
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Instagram <MdArrowOutward />
-            </a>
           </div>
           <div className="contact-box">
             <h2>

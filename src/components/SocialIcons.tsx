@@ -10,6 +10,8 @@ import HoverLinks from "./HoverLinks";
 
 const SocialIcons = () => {
   useEffect(() => {
+    // The magnetic hover effect needs a mouse; skip its per-frame loops on touch screens
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     const social = document.getElementById("social") as HTMLElement;
 
     social.querySelectorAll("span").forEach((item) => {

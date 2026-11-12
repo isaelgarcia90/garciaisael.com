@@ -100,9 +100,8 @@
     left: 50%;
     width: 100vw;
     transform: translateX(-50%);
-    background: rgba(10, 14, 23, 0.88);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    /* Solid bar: a blur behind a fixed bar repaints on every scroll frame */
+    background: rgba(10, 14, 23, 0.97);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     z-index: -1;
   }

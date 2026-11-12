@@ -250,8 +250,23 @@ body .header ul li a {
   body .work-image img {
     max-height: 130px;
   }
+  /* Arrows and dots sit right under the title, easy to reach */
+  body .carousel-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
   body .carousel-dots {
-    margin-top: 12px;
+    order: -1;
+    margin: 0 0 4px;
+    min-height: 40px;
+  }
+  body .carousel-arrow {
+    top: 0;
+    bottom: auto;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    backdrop-filter: none;
   }
 
   /* Contact */
@@ -259,7 +274,7 @@ body .header ul li a {
     width: 100%;
   }
   body .contact-flex {
-    gap: 8px;
+    gap: 28px;
   }
   body .contact-flex h4 {
     margin-top: 16px;
@@ -279,13 +294,16 @@ body .header ul li a {
     opacity: 0.6;
     margin: 0;
   }
-  body .contact-degree span.contact-years {
-    color: var(--accentColor);
-    opacity: 1;
-  }
   body a.contact-social {
     font-size: 14px;
     padding: 8px 0;
+    margin-top: 0;
+  }
+  body a.contact-social .contact-handle {
+    font-size: 12px;
+  }
+  body .contact-box a.contact-social + h4 {
+    margin-top: 16px;
   }
   body .contact-box h2 {
     font-size: 14px;
