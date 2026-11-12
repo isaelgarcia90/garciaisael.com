@@ -10,7 +10,7 @@ import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
 import { initialFX } from "./utils/initialFX";
-import { trackSectionViews } from "./utils/analytics";
+import { notifyVisit, trackSectionViews } from "./utils/analytics";
 
 const TechStack = lazy(() => import("./TechStack"));
 
@@ -33,6 +33,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
 
   // Google Analytics: report which sections each visitor reaches
   useEffect(() => trackSectionViews(), []);
+  useEffect(() => notifyVisit(), []);
 
   // The page intro (texts, menu, scroll) starts from Scene.tsx when the character lights turn on.
   // Fallback: if the model fails to load, start it anyway so the page never stays hidden.

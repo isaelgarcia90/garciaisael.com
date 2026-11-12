@@ -61,3 +61,20 @@ export function trackSectionViews(): () => void {
     mo.disconnect();
   };
 }
+
+// Ping /api/visit once per browser session so a Discord notification is sent
+export function notifyVisit() {
+  if (!["garciaisael.com", "www.garciaisael.com"].includes(location.hostname)) return;
+  try {
+    if (sessionStorage.getItem("visit-notified")) return;
+    sessionStorage.setItem("visit-notified", "1");
+  } catch {
+    // storage blocked: still notify
+  }
+  fetch("/api/visit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ referrer: document.referrer }),
+    keepalive: true,
+  }).catch(() => undefined);
+}
