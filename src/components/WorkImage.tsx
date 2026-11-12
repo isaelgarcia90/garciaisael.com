@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MdArrowOutward } from "react-icons/md";
+import { asset } from "../assetVersion";
 
 interface Props {
   image: string;
@@ -30,14 +31,14 @@ const WorkImage = (props: Props) => {
         onMouseLeave={() => setIsVideo(false)}
         target="_blank"
         data-cursor={"disable"}
-        style={{ ["--workImg" as string]: `url("${props.image}")` }}
+        style={{ ["--workImg" as string]: `url("${asset(props.image)}")` }}
       >
         {props.link && (
           <div className="work-link">
             <MdArrowOutward />
           </div>
         )}
-        <img src={props.image} alt={props.alt} />
+        <img src={asset(props.image)} alt={props.alt} loading="lazy" decoding="async" />
         {isVideo && <video src={video} autoPlay muted playsInline loop></video>}
       </a>
     </div>

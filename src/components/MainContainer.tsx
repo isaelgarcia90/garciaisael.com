@@ -1,4 +1,4 @@
-import { lazy, PropsWithChildren, Suspense, useEffect, useState } from "react";
+import { lazy, PropsWithChildren, Suspense, useEffect, useRef, useState } from "react";
 import About from "./About";
 import Career from "./Career";
 import Contact from "./Contact";
@@ -14,6 +14,28 @@ import { notifyVisit, trackSectionViews } from "./utils/analytics";
 import { MdScreenRotation } from "react-icons/md";
 
 const TechStack = lazy(() => import("./TechStack"));
+
+// The Techstack 3D scene (and its textures) only downloads when the visitor
+// gets within one screen of it; until then an empty box of the same size holds its place.
+const DeferredTechStack = () => {
+  const slot = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    if (near || !slot.current) return;
+    const io = new IntersectionObserver(
+      ([e]) => e.isIntersecting && setNear(true),
+      { rootMargin: "100% 0px" }
+    );
+    io.observe(slot.current);
+    return () => io.disconnect();
+  }, [near]);
+  if (!near) return <div className="techstack" ref={slot} />;
+  return (
+    <Suspense fallback={<div className="techstack" />}>
+      <TechStack />
+    </Suspense>
+  );
+};
 
 const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
@@ -62,11 +84,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <WhatIDo />
             <Career />
             <Work />
-            {isDesktopView && (
-              <Suspense fallback={<div>Loading....</div>}>
-                <TechStack />
-              </Suspense>
-            )}
+            {isDesktopView && <DeferredTechStack />}
             <Contact />
           </div>
         </div>

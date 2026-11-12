@@ -180,3 +180,22 @@
     height: 40px;
   }
 }
+
+/* Wide screens: RESUME sits right beside the theme menu */
+@media only screen and (min-width: 1025px) {
+  .header-stack {
+    flex-direction: row;
+    align-items: center;
+    gap: 22px;
+  }
+  .navbar-resume {
+    padding-left: 0;
+  }
+}
+/* Tablets in landscape and small laptops: tighter section menu, pushed to the right */
+@media only screen and (min-width: 1025px) and (max-width: 1400px) {
+  .header ul {
+    column-gap: 24px;
+    font-size: 14px;
+  }
+}

@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { RGBELoader } from "three-stdlib";
+import { asset } from "../../../assetVersion";
 import { gsap } from "gsap";
 import { getTheme, onThemeChange } from "../../../theme/theme";
 
@@ -22,8 +23,7 @@ const setLighting = (scene: THREE.Scene) => {
   scene.add(pointLight);
 
   new RGBELoader()
-    .setPath("/models/")
-    .load("char_enviorment.hdr?v=2", function (texture) {
+    .load(asset("/models/char_enviorment.hdr"), function (texture) {
       texture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = texture;
       scene.environmentIntensity = 0;

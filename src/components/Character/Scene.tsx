@@ -144,7 +144,10 @@ const Scene = () => {
       const animate = () => {
         frame = requestAnimationFrame(animate);
         const delta = clock.getDelta();
-        if (!onScreen || document.hidden) return;
+        // One-column layout: the character scrolls away, so stop drawing it off screen.
+        // Desktop/tablet landscape: it is fixed and moved by the scroll animation; always draw it
+        // (pausing there froze it on screen and made it appear/disappear late).
+        if (document.hidden || (!onScreen && window.innerWidth <= 1024)) return;
         if (headBone) {
           handleHeadRotation(
             headBone,

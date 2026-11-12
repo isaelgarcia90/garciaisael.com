@@ -27,7 +27,7 @@ const WhatIDo = () => {
   return (
     <div className="whatIDO" id="whatido">
       <div className="what-box">
-        <h2 className="title section-title">What I Do</h2>
+        <h2 className="section-title">What I Do</h2>
       </div>
       <div className="what-box">
         <div className="what-box-in">

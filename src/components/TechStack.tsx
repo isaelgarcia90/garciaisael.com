@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
+import { asset } from "../assetVersion";
 
 const textureLoader = new THREE.TextureLoader();
 const imageUrls = [
@@ -24,7 +25,7 @@ const imageUrls = [
   "/images/github.webp",
   //"/images/openclaw.webp",
 ];
-const textures = imageUrls.map((url) => textureLoader.load(url));
+const textures = imageUrls.map((url) => textureLoader.load(asset(url)));
 
 // Aumentamos ligeramente el tamaño y los segmentos para mejor resolución
 const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
@@ -136,7 +137,7 @@ const TechStack = () => {
 
         {/* Conservamos tu entorno y postprocesado originales */}
         <Environment
-          files="/models/char_enviorment.hdr"
+          files={asset("/models/char_enviorment.hdr")}
           environmentIntensity={0.5}
         />
         {!isTouch && (

@@ -4,7 +4,7 @@ const About = () => {
   return (
     <div className="about-section" id="about">
       <div className="about-me">
-        <h3 className="title section-title">About Me</h3>
+        <h3 className="section-title">About Me</h3>
         <p className="para">
           <br />
           Focused on applied AI, generative models, multi-agent systems, autonomous agent networks, and automated workflows designed for business automation.

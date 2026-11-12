@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { DRACOLoader, GLTF, GLTFLoader } from "three-stdlib";
 import { setCharTimeline, setAllTimeline } from "../../utils/GsapScroll";
 import { decryptFile } from "./decrypt";
+import { asset } from "../../../assetVersion";
 import { getTheme, onThemeChange } from "../../../theme/theme";
 
 // Label on the front of the cap: the "< IG >" logo, drawn in code so the brackets
@@ -136,7 +137,7 @@ const setCharacter = (
     return new Promise<GLTF | null>(async (resolve, reject) => {
       try {
         const encryptedBlob = await decryptFile(
-          "/models/character.enc?v=2",
+          asset("/models/character.enc"),
           "MyCharacter12"
         );
         const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
