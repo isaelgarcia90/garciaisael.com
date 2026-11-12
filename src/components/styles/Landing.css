@@ -26,6 +26,7 @@
   filter: blur(60px);
   border-radius: 50%;
   animation: loadingCircle 5s linear infinite;
+  will-change: transform;
 }
 
 .nav-fade {
@@ -66,6 +67,7 @@
   filter: blur(50px);
   border-radius: 50%;
   animation: loadingCircle2 5s linear infinite;
+  will-change: transform;
 }
 
 @keyframes loadingCircle2 {

@@ -11,6 +11,7 @@ import Work from "./Work";
 import setSplitText from "./utils/splitText";
 import { initialFX } from "./utils/initialFX";
 import { notifyVisit, trackSectionViews } from "./utils/analytics";
+import { MdScreenRotation } from "react-icons/md";
 
 const TechStack = lazy(() => import("./TechStack"));
 
@@ -44,6 +45,11 @@ const MainContainer = ({ children }: PropsWithChildren) => {
 
   return (
     <div className="container-main">
+      {/* Phones turned sideways: ask to go back to portrait (shown only by CSS) */}
+      <div className="rotate-notice" aria-hidden="true">
+        <MdScreenRotation />
+        <p>Rotate your phone to portrait</p>
+      </div>
       <Cursor />
       <Navbar />
       <SocialIcons />

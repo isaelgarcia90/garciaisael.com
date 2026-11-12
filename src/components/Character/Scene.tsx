@@ -34,7 +34,8 @@ const Scene = () => {
       });
       renderer.setSize(container.width, container.height);
       // Phones report 3x pixel density; 1.5x looks the same and draws far fewer pixels
-      const maxDpr = window.innerWidth <= 1024 ? 1.5 : 2;
+      const isTouch = window.matchMedia("(pointer: coarse)").matches;
+      const maxDpr = window.innerWidth <= 1024 || isTouch ? 1.5 : 2;
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
@@ -51,6 +52,18 @@ const Scene = () => {
       let mixer: THREE.AnimationMixer;
 
       const clock = new THREE.Clock();
+      let resizeTimer: number | undefined;
+
+      // Keep the 3D view exactly the size of its box, whatever the screen or
+      // orientation does (tablets rotating, browser bars showing/hiding)
+      const fitToBox = new ResizeObserver(([entry]) => {
+        const { width, height } = entry.contentRect;
+        if (!width || !height) return;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      });
+      fitToBox.observe(canvasDiv.current);
 
       const light = setLighting(scene);
       let progress = setProgress((value) => setLoading(value));
@@ -73,9 +86,15 @@ const Scene = () => {
               initialFX(); // texts, menu and scroll appear when the lights turn on
             }, 3000);
           });
-          window.addEventListener("resize", () =>
-            handleResize(renderer, camera, canvasDiv, character)
-          );
+          // Rebuild the scroll animations once the size settles (rotation fires
+          // several resize events while the browser is still changing layout)
+          window.addEventListener("resize", () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(
+              () => handleResize(renderer, camera, canvasDiv, character),
+              250
+            );
+          });
         }
       });
 
@@ -146,6 +165,8 @@ const Scene = () => {
       return () => {
         clearTimeout(debounce);
         cancelAnimationFrame(frame);
+        clearTimeout(resizeTimer);
+        fitToBox.disconnect();
         visibility.disconnect();
         scene.clear();
         renderer.dispose();

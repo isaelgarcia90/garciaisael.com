@@ -25,12 +25,20 @@ body .techstack h2.section-title {
   -webkit-text-fill-color: currentColor;
   text-align: left;
 }
-/* My Techstack: same title, lined up with the other sections */
-body .techstack h2.section-title {
-  width: var(--cWidth);
-  max-width: var(--cMaxWidth);
+/* My Techstack: title box has the same width as Experience, My Work and Contact,
+   so the title starts at the same left edge and sits at the same height */
+body .techstack .techstack-title {
+  position: absolute;
+  top: 80px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+body .techstack h2.section-title {
+  position: static;
+  width: auto;
+  margin: 0;
 }
 @media only screen and (max-width: 1200px) {
   body .section-title,
@@ -112,7 +120,7 @@ body .header ul li a {
   body .career-section,
   body .work-section,
   body .contact-section {
-    min-height: calc(100svh - 64px);
+    min-height: calc(100svh - var(--navH, 64px));
     box-sizing: border-box;
     padding-top: 28px;
     padding-bottom: 28px;
@@ -255,9 +263,7 @@ body .header ul li a {
   body .carousel-tools p {
     line-height: 20px;
   }
-  body .work-image img {
-    max-height: 130px;
-  }
+
   /* Arrows and dots sit right under the title, easy to reach */
   body .carousel-wrapper {
     display: flex;
@@ -329,5 +335,89 @@ body .header ul li a {
   }
   body .landing-info {
     bottom: 90px;
+  }
+}
+
+/* ── Phones turned sideways: keep the portrait design ── */
+.rotate-notice {
+  display: none;
+}
+@media only screen and (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  .rotate-notice {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: var(--backgroundColor);
+    color: var(--accentColor);
+    font-size: 44px;
+  }
+  .rotate-notice p {
+    margin: 0;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #d4d0d8;
+  }
+  .rotate-notice svg {
+    animation: rotateHint 2.4s ease-in-out infinite;
+  }
+  body:has(.rotate-notice) {
+    overflow: hidden;
+  }
+}
+@keyframes rotateHint {
+  0%, 30% { transform: rotate(90deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+/* ── My Work: every project's preview sits at the same height ── */
+.carousel-content {
+  align-items: flex-start;
+}
+@media only screen and (max-width: 1025px) {
+  /* Preview first, right under the arrows; the description follows */
+  body .carousel-image-wrapper {
+    order: -1;
+  }
+}
+
+/* Same frame for every preview (the shape of the widest screenshot), so the
+   images line up when swiping, whatever the original picture's shape */
+body .work-image img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 2461 / 1147;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* ── Desktop: What I Do title starts at the same left edge as the other sections ──
+   --secW mirrors the .section-container width (App.css) */
+:root {
+  --secW: 1300px;
+}
+@media only screen and (max-width: 1600px) {
+  :root {
+    --secW: min(1200px, 100vw - 160px);
+  }
+}
+@media only screen and (max-width: 1400px) {
+  :root {
+    --secW: min(900px, 100vw - 160px);
+  }
+}
+@media only screen and (min-width: 1025px) {
+  body .whatIDO .what-box:first-child {
+    justify-content: flex-start;
+  }
+  body .what-box h2.section-title {
+    margin-right: 0;
+    /* whatIDO is 94% wide and centered, so it starts at 3vw */
+    margin-left: calc((100vw - var(--secW)) / 2 - 3vw);
   }
 }

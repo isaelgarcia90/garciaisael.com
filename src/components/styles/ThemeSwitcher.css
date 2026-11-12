@@ -1,6 +1,6 @@
 .header-left {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   align-self: flex-start;
 }
@@ -79,7 +79,7 @@
 }
 @media only screen and (min-width: 500px) {
   .header-left {
-    align-self: center;
+    align-self: flex-start;
     gap: 24px;
   }
 }

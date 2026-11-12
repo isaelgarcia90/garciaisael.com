@@ -30,13 +30,19 @@
   font-weight: 600;
   cursor: pointer;
 }
-/* Resume: always visible, centered between the theme menu and the section menu */
+/* Theme menu with RESUME right below it, always in the same place */
+.header-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
 .navbar-resume {
   display: flex;
   align-items: center;
   gap: 6px;
-  align-self: center;
-  font-size: 15px;
+  padding-left: 10px;
+  font-size: 13px;
   line-height: 1;
   letter-spacing: 3px;
   font-weight: 600;
@@ -53,9 +59,20 @@
   display: none;
 }
 .navbar-title {
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  color: var(--accentColor);
+  transition: filter 0.3s ease;
+}
+.navbar-title svg {
+  height: 30px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(var(--accentRgb), 0.55));
+}
+.navbar-title:hover svg {
+  filter: drop-shadow(0 0 10px rgba(var(--accentRgb), 0.9));
 }
 @media only screen and (min-width: 500px) {
   .header {
@@ -69,9 +86,6 @@
   .header ul li {
     color: #eae5ec;
   }
-  .navbar-title {
-    font-size: 16px;
-  }
 }
 @media only screen and (min-width: 1200px) {
   .header {
@@ -80,12 +94,6 @@
   .header ul {
     column-gap: 36px;
     font-size: 15px;
-  }
-  .navbar-resume {
-    font-size: 16px;
-  }
-  .navbar-title {
-    font-size: 18px;
   }
 }
 
@@ -152,8 +160,23 @@
     color: #eae5ec;
     letter-spacing: 2px;
   }
+  .header {
+    align-items: flex-start;
+  }
+  .header-right {
+    height: 34px;
+  }
   .navbar-resume {
     font-size: 12px;
     letter-spacing: 2px;
+  }
+  .header-stack {
+    gap: 8px;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .navbar-title svg {
+    height: 40px;
   }
 }

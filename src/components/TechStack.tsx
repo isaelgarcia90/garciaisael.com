@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
@@ -57,8 +57,6 @@ const Carousel = ({ materials }: { materials: THREE.MeshPhysicalMaterial[] }) =>
             rotation={[0, -angle + Math.PI / 2, 0]}
             geometry={sphereGeometry}
             material={material}
-            castShadow
-            receiveShadow
           />
         );
       })}
@@ -66,7 +64,23 @@ const Carousel = ({ materials }: { materials: THREE.MeshPhysicalMaterial[] }) =>
   );
 };
 
+// Touch devices (tablets) skip the ambient-occlusion pass, the most expensive part
+const isTouch =
+  typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+
 const TechStack = () => {
+  // Only animate while the section is on screen
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [onScreen, setOnScreen] = useState(false);
+  useEffect(() => {
+    if (!boxRef.current) return;
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), {
+      rootMargin: "200px",
+    });
+    io.observe(boxRef.current);
+    return () => io.disconnect();
+  }, []);
+
   const materials = useMemo(() => {
     return textures.map(
       (texture) =>
@@ -83,12 +97,15 @@ const TechStack = () => {
   }, []);
 
   return (
-    <div className="techstack">
-      <h2 className="section-title">My Techstack</h2>
+    <div className="techstack" ref={boxRef}>
+      <div className="techstack-title section-container">
+        <h2 className="section-title">My Techstack</h2>
+      </div>
 
       <Canvas
-        shadows
-        gl={{ alpha: true, antialias: true }}
+        dpr={[1, isTouch ? 1.25 : 1.5]}
+        frameloop={onScreen ? "always" : "never"}
+        gl={{ alpha: true, antialias: !isTouch, powerPreference: "high-performance" }}
         // Elevamos un poco la cámara en el eje Y y ajustamos el FOV para encuadrar el carrusel
         camera={{ position: [0, 2, 14], fov: 35 }}
         className="tech-canvas"
@@ -99,7 +116,6 @@ const TechStack = () => {
           penumbra={1}
           angle={0.2}
           color="white"
-          castShadow
         />
         <directionalLight position={[0, 5, -4]} intensity={2} />
 
@@ -111,9 +127,11 @@ const TechStack = () => {
           files="/models/char_enviorment.hdr"
           environmentIntensity={0.5}
         />
-        <EffectComposer enableNormalPass={false}>
-          <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
-        </EffectComposer>
+        {!isTouch && (
+          <EffectComposer enableNormalPass={false}>
+            <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
+          </EffectComposer>
+        )}
       </Canvas>
     </div>
   );

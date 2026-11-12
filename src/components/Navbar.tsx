@@ -11,6 +11,40 @@ import "./styles/Navbar.css";
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
 
+// Same "< IG >" logo as the cap: brackets in the color mode, white IG, soft glow
+const CapLogo = () => (
+  <svg viewBox="0 0 260 200" aria-hidden="true">
+    <g
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="14"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M55 55 L15 100 L55 145" />
+      <path d="M205 55 L245 100 L205 145" />
+    </g>
+    <text
+      x="130"
+      y="128"
+      textAnchor="middle"
+      fontFamily="Arial Black, Arial, sans-serif"
+      fontWeight="900"
+      fontSize="80"
+      letterSpacing="-3"
+      fill="#fff"
+    >
+      IG
+    </text>
+  </svg>
+);
+
+const goToTop = (e: React.MouseEvent) => {
+  e.preventDefault();
+  if (smoother) smoother.scrollTo(0, true);
+  else window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -31,6 +65,18 @@ const Navbar = () => {
     window.addEventListener("scroll", close, { passive: true });
     return () => window.removeEventListener("scroll", close);
   }, [menuOpen]);
+
+  // Share the bar height with the CSS (--navH), so sections start right below it
+  useEffect(() => {
+    const header = document.querySelector(".header") as HTMLElement | null;
+    if (!header) return;
+    const setNavH = () =>
+      document.documentElement.style.setProperty("--navH", `${header.offsetHeight}px`);
+    setNavH();
+    const ro = new ResizeObserver(setNavH);
+    ro.observe(header);
+    return () => ro.disconnect();
+  }, []);
 
   useEffect(() => {
     smoother = ScrollSmoother.create({
@@ -54,7 +100,9 @@ const Navbar = () => {
         if (!section) return;
         e.preventDefault();
         // On mobile, leave room for the fixed top bar
-        const offset = window.innerWidth <= 1024 ? "top 64px" : "top top";
+        const header = document.querySelector(".header") as HTMLElement | null;
+        const offset =
+          window.innerWidth <= 1024 ? `top ${header?.offsetHeight ?? 64}px` : "top top";
         smoother.scrollTo(section, true, offset);
       });
     });
@@ -66,20 +114,28 @@ const Navbar = () => {
     <>
       <div className={`header ${menuOpen ? "menu-open" : ""}`}>
         <div className="header-left">
-          <a href="/#" className="navbar-title" data-cursor="disable">
-            IG
+          <a
+            href="/#"
+            className="navbar-title"
+            data-cursor="disable"
+            aria-label="Back to top"
+            onClick={goToTop}
+          >
+            <CapLogo />
           </a>
-          <ThemeSwitcher />
+          <div className="header-stack">
+            <ThemeSwitcher />
+            <a
+              href="/Isael_Garcia__CV.pdf"
+              className="navbar-resume"
+              data-cursor="disable"
+              target="_blank"
+              rel="noreferrer"
+            >
+              RESUME <TbNotes />
+            </a>
+          </div>
         </div>
-        <a
-          href="/Isael_Garcia__CV.pdf"
-          className="navbar-resume"
-          data-cursor="disable"
-          target="_blank"
-          rel="noreferrer"
-        >
-          RESUME <TbNotes />
-        </a>
         <div className="header-right">
           <button
             type="button"
