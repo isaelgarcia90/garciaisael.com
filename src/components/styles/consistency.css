@@ -66,8 +66,8 @@ body .header ul li a {
   letter-spacing: 1px;
 }
 
-/* ───────────────────────── Phones ───────────────────────── */
-@media only screen and (max-width: 767px) {
+/* ──────────── Phones and tablets in portrait (one column) ──────────── */
+@media only screen and (max-width: 1024px) {
   /* Titles */
   body .section-title,
   body .about-me h3.section-title,
@@ -189,6 +189,18 @@ body .header ul li a {
   body .what-box h2.section-title {
     margin-top: 0;
   }
+  /* Title right above the cards, both starting at the top of the section */
+  body .whatIDO {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: auto;
+  }
+  body .whatIDO .what-box {
+    height: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
   body .what-box-in {
     gap: 12px;
   }
@@ -264,24 +276,7 @@ body .header ul li a {
     line-height: 20px;
   }
 
-  /* Arrows and dots sit right under the title, easy to reach */
-  body .carousel-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  body .carousel-dots {
-    order: -1;
-    margin: 0 0 4px;
-    min-height: 40px;
-  }
-  body .carousel-arrow {
-    top: 0;
-    bottom: auto;
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    backdrop-filter: none;
-  }
+
 
   /* Contact */
   body .contact-container {
@@ -375,7 +370,7 @@ body .header ul li a {
 }
 
 /* ── My Work: every project's preview sits at the same height ── */
-.carousel-content {
+body .carousel-content {
   align-items: flex-start;
 }
 @media only screen and (max-width: 1025px) {
@@ -385,16 +380,6 @@ body .header ul li a {
   }
 }
 
-/* Same frame for every preview (the shape of the widest screenshot), so the
-   images line up when swiping, whatever the original picture's shape */
-body .work-image img {
-  width: 100%;
-  height: auto;
-  max-height: none;
-  aspect-ratio: 2461 / 1147;
-  object-fit: cover;
-  object-position: top center;
-}
 
 /* ── Desktop: What I Do title starts at the same left edge as the other sections ──
    --secW mirrors the .section-container width (App.css) */
@@ -419,5 +404,170 @@ body .work-image img {
     margin-right: 0;
     /* whatIDO is 94% wide and centered, so it starts at 3vw */
     margin-left: calc((100vw - var(--secW)) / 2 - 3vw);
+  }
+}
+
+/* ── My Work previews: one frame for every project; the whole screenshot is
+   shown inside it (blurred copy behind fills the empty sides) ── */
+body .work-image-in {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #05070c;
+}
+body .work-image-in::before {
+  content: "";
+  position: absolute;
+  inset: -24px;
+  background: var(--workImg) center / cover no-repeat;
+  filter: blur(18px) brightness(0.45);
+}
+body .work-image img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+/* ── My Techstack: same width as the other sections ── */
+@media only screen and (min-width: 1025px) {
+  body .techstack {
+    width: var(--secW);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  body .techstack .techstack-title {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* ── Tablets in portrait: same design as phones, larger type ── */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  body .section-title,
+  body .about-me h3.section-title,
+  body .what-box h2.section-title,
+  body .career-section h2.section-title,
+  body .work-section h2.section-title,
+  body .contact-section h3.section-title {
+    font-size: 34px;
+    margin-bottom: 26px;
+  }
+  body .about-me p,
+  body .what-content p,
+  body .career-info-box p,
+  body .carousel-category,
+  body .carousel-tools p,
+  body .contact-flex p,
+  body .contact-flex p a {
+    font-size: 18px;
+    line-height: 29px;
+  }
+  body .what-content h3,
+  body .career-info .career-role h4,
+  body .carousel-details h4,
+  body .contact-flex .contact-degree p {
+    font-size: 22px;
+    line-height: 30px;
+  }
+  body .what-content h4,
+  body .what-content h5,
+  body .career-info .career-role h5,
+  body .career-info-in > h4,
+  body .career-info-in > h5,
+  body .carousel-tools .tools-label,
+  body .carousel-number h3,
+  body .contact-flex h4,
+  body .contact-degree span {
+    font-size: 15px;
+    line-height: 22px;
+  }
+  body .what-tags {
+    font-size: 14px;
+    padding: 4px 12px;
+  }
+  body a.contact-social {
+    font-size: 18px;
+    padding: 12px 0;
+  }
+  body a.contact-social .contact-handle {
+    font-size: 15px;
+  }
+  body .about-me,
+  body .what-box,
+  body .career-section .career-container,
+  body .work-container,
+  body .contact-container {
+    width: 640px;
+    max-width: calc(100% - 64px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  body .what-content,
+  body .what-noTouch:hover,
+  body .what-content-active,
+  body .what-content.what-sibling,
+  body .what-box-in:hover .what-noTouch:not(:hover),
+  body .what-noTouch:hover ~ .what-content {
+    padding: 22px 26px;
+  }
+  body .work-image-in {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* ── My Work (every size): arrows and dots in one row right under the title,
+   never on top of the preview ── */
+body .carousel-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+body .carousel-dots {
+  order: -1;
+  margin: 0 0 8px;
+  min-height: 44px;
+  align-items: center;
+}
+body .carousel-arrow {
+  top: 0;
+  bottom: auto;
+  transform: none;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  backdrop-filter: none;
+}
+body .carousel-arrow-left {
+  left: 0;
+}
+body .carousel-arrow-right {
+  right: 0;
+}
+@media only screen and (max-width: 1024px) {
+  body .carousel-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  body .carousel-dots {
+    min-height: 40px;
+    margin-bottom: 4px;
+  }
+}
+
+/* ── My Techstack: soft edges so the spheres fade out at the section's sides ── */
+@media only screen and (min-width: 1025px) {
+  body .techstack .tech-canvas {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  body .career-info h4 {
+    width: auto;
   }
 }

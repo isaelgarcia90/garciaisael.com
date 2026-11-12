@@ -395,8 +395,8 @@
   }
 }
 
-/* ── Phones: compact cards, skills always visible (no tap to expand) ── */
-@media only screen and (max-width: 767px) {
+/* ── Phones and tablets in portrait: compact cards, skills always visible (no tap to expand) ── */
+@media only screen and (max-width: 1024px) {
   .whatIDO {
     padding: 30px 0px;
   }

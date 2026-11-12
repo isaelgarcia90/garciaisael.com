@@ -101,6 +101,7 @@ const Navbar = () => {
         e.preventDefault();
         // On mobile, leave room for the fixed top bar
         const header = document.querySelector(".header") as HTMLElement | null;
+        // One column layout: leave room for the fixed top bar
         const offset =
           window.innerWidth <= 1024 ? `top ${header?.offsetHeight ?? 64}px` : "top top";
         smoother.scrollTo(section, true, offset);

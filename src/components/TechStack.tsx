@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
 
@@ -64,6 +64,17 @@ const Carousel = ({ materials }: { materials: THREE.MeshPhysicalMaterial[] }) =>
   );
 };
 
+// Pull the camera back when the box is narrow, so the whole ring stays in view
+const FitCamera = () => {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    const aspect = size.width / size.height;
+    camera.position.z = 14 * Math.max(1, 2.1 / aspect);
+    camera.updateProjectionMatrix();
+  }, [camera, size]);
+  return null;
+};
+
 // Touch devices (tablets) skip the ambient-occlusion pass, the most expensive part
 const isTouch =
   typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
@@ -120,6 +131,7 @@ const TechStack = () => {
         <directionalLight position={[0, 5, -4]} intensity={2} />
 
         {/* Instanciamos el carrusel */}
+        <FitCamera />
         <Carousel materials={materials} />
 
         {/* Conservamos tu entorno y postprocesado originales */}

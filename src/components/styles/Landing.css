@@ -101,9 +101,10 @@
   box-shadow: inset 66px 35px 85px 0px rgba(var(--accentDeepRgb), 0.65);
   filter: blur(50px);
   border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 100%) scale(1.4);
+  /* centered with offsets, not translate: GSAP animates its transform */
+  top: calc(50% + 400px);
+  left: calc(50% - 200px);
+  transform: scale(1.4);
   opacity: 0;
 }
 
@@ -113,9 +114,11 @@
   position: absolute;
   max-width: 1920px;
   max-height: 1080px;
-  transform: translateX(-50%);
+  /* centered with margins, not transform: GSAP owns this element's transform */
   width: 100%;
-  left: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   z-index: 0;
   bottom: 50px;
   pointer-events: inherit;
