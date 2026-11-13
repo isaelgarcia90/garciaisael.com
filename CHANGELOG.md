@@ -4,11 +4,25 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 - Cada versión corresponde a un Pull Request (PR) o, en el sitio anterior, a una etapa de trabajo.
 - Cada commit aparece con su hash corto, su fecha y lo que cambió.
-- Total en `main`: 62 commits (51 de trabajo y 11 merges de PR).
+- Total en `main`: 65 commits (53 de trabajo y 12 merges de PR).
+
+---
+
+## [PR #12] CV reescrito con la fórmula X-Y-Z (13 nov 2026)
+
+- Reemplaza `public/docs/Isael_Garcia_CV.pdf` por la versión nueva (mismo nombre y ruta, 4.1 MB, 1 página). El botón RESUME no cambia.
+- Las viñetas de experiencia se reescribieron con la fórmula X-Y-Z:
+  - **X (logro o resultado):** qué se consiguió.
+  - **Y (métrica o impacto):** cómo se midió, con números, porcentajes o KPIs.
+  - **Z (acción o estrategia):** qué se hizo exactamente o qué herramientas se usaron.
+- Ejemplos: "Shipped a headlamp Showroom Mode feature in production Ford vehicles, developed in C and Python across the full SDLC" y "Defined 500+ software requirements across 5 systems of Renault's electric vehicle platform…".
+- Los textos del sitio (Career, Work) no copian las viñetas del CV, así que no cambian.
 
 ---
 
 ## [PR #11] Brackets en los dientes del personaje (13 nov 2026)
+
+Merge `3ac8199`.
 
 - **`03e9c89`** (13 nov 2026). El personaje ahora tiene brackets: 6 por arcada (arriba y abajo), unidos por un alambre. Se dibujan en código en `src/components/Character/utils/character.ts` (función `addBraces`), sin tocar el modelo 3D, y van sujetos al hueso de la cabeza para seguir todas las animaciones.
 - Brackets y alambre son plateados; la liga de cada bracket toma el color del modo activo (Galaxy, Sky, Hacker, Retro Terminal, Kernel Panic, Clean Code).
