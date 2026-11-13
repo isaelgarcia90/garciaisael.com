@@ -123,6 +123,78 @@ const addCapLabel = async (character: THREE.Object3D) => {
   });
 };
 
+// Braces on the teeth, built in code (the model is not touched). Silver brackets and
+// wire, plus a small elastic tie on each bracket in the color of the active color mode.
+// Positions are in the head bone's space (spine006), measured from the Teeth001 mesh.
+type ArchPoint = [x: number, z: number]; // front of the teeth along the arch
+const UPPER_ARCH: ArchPoint[] = [[0, 1.07], [0.125, 1.066], [0.247, 1.056], [0.365, 1.034], [0.477, 0.996], [0.58, 0.939], [0.672, 0.859]];
+const LOWER_ARCH: ArchPoint[] = [[0, 1.037], [0.12, 1.034], [0.247, 1.026], [0.36, 1.005], [0.47, 0.963], [0.57, 0.906], [0.66, 0.825]];
+const BRACE_ARCHES = [
+  { y: 0.625, tilt: 0, arch: UPPER_ARCH }, // upper teeth: front is upright
+  { y: 0.445, tilt: 0.28, arch: LOWER_ARCH }, // lower teeth: front leans back
+];
+const BRACKET_X = [0.09, 0.27, 0.45]; // per side, mirrored: 6 brackets per arch
+
+const archZ = (arch: ArchPoint[], x: number) => {
+  const ax = Math.abs(x);
+  for (let i = 1; i < arch.length; i++) {
+    const [x0, z0] = arch[i - 1];
+    const [x1, z1] = arch[i];
+    if (ax <= x1) return z0 + ((z1 - z0) * (ax - x0)) / (x1 - x0);
+  }
+  return arch[arch.length - 1][1];
+};
+
+const addBraces = (character: THREE.Object3D) => {
+  const head = character.getObjectByName("spine006"); // bone that moves the teeth
+  if (!head || !character.getObjectByName("Teeth001")) return;
+
+  const metal = new THREE.MeshStandardMaterial({ color: "#d4d8de", metalness: 0.9, roughness: 0.25 });
+  const tieMaterial = new THREE.MeshStandardMaterial({ color: getTheme().deep, roughness: 0.45 });
+  onThemeChange((theme) => tieMaterial.color.set(theme.deep));
+
+  const bracketGeometry = new THREE.BoxGeometry(0.1, 0.09, 0.035);
+  const slotGeometry = new THREE.BoxGeometry(0.11, 0.022, 0.025);
+  const tieGeometry = new THREE.TorusGeometry(0.04, 0.011, 8, 20);
+
+  const braces = new THREE.Group();
+  braces.name = "Braces";
+
+  for (const { y, tilt, arch } of BRACE_ARCHES) {
+    const xs = [...BRACKET_X].reverse().map((x) => -x).concat(BRACKET_X);
+    const wirePoints: THREE.Vector3[] = [];
+    for (const x of xs) {
+      const z = archZ(arch, x);
+      // Turn each bracket to face out from the arch
+      const slope = (archZ(arch, x + 0.01) - archZ(arch, x - 0.01)) / 0.02;
+      const bracket = new THREE.Group();
+      bracket.position.set(x, y, z);
+      bracket.rotation.set(tilt, -Math.atan(slope), 0, "YXZ");
+
+      const base = new THREE.Mesh(bracketGeometry, metal);
+      base.position.z = 0.014;
+      const slot = new THREE.Mesh(slotGeometry, metal);
+      slot.position.z = 0.036;
+      const tie = new THREE.Mesh(tieGeometry, tieMaterial);
+      tie.position.z = 0.036;
+      bracket.add(base, slot, tie);
+      braces.add(bracket);
+
+      wirePoints.push(new THREE.Vector3(0, 0, 0.048).applyEuler(bracket.rotation).add(bracket.position));
+    }
+    // Wire runs through the brackets and a bit past the last ones on each side
+    const first = wirePoints[0];
+    const last = wirePoints[wirePoints.length - 1];
+    const endX = BRACKET_X[BRACKET_X.length - 1] + 0.07;
+    wirePoints.unshift(new THREE.Vector3(-endX, first.y, archZ(arch, endX) + 0.025));
+    wirePoints.push(new THREE.Vector3(endX, last.y, archZ(arch, endX) + 0.025));
+    const wireGeometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(wirePoints), 48, 0.009, 6);
+    braces.add(new THREE.Mesh(wireGeometry, metal));
+  }
+
+  head.add(braces);
+};
+
 const setCharacter = (
   renderer: THREE.WebGLRenderer,
   scene: THREE.Scene,
@@ -214,6 +286,7 @@ const setCharacter = (
             paintThemedParts();
             onThemeChange(paintThemedParts);
             addCapLabel(character);
+            addBraces(character);
             resolve(gltf);
             setCharTimeline(character, camera);
             setAllTimeline();
