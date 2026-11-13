@@ -587,6 +587,9 @@ body .carousel-arrow-right {
   only screen and (min-width: 1025px) and (pointer: coarse) {
   body .whatIDO .what-box:last-child {
     justify-content: flex-end;
+    /* cards start right below the menu bar */
+    align-self: flex-start;
+    padding-top: calc(var(--navH, 70px) + 20px);
     padding-right: 2vw;
     box-sizing: border-box;
   }
@@ -646,5 +649,31 @@ body .carousel-arrow-right {
   body .what-tags {
     font-size: 11px;
     padding: 2px 8px;
+  }
+}
+
+/* Wide touch screens: the dark fade under the menu only covers the bar,
+   so text right below it is not greyed out */
+@media only screen and (min-width: 1025px) and (hover: none),
+  only screen and (min-width: 1025px) and (pointer: coarse) {
+  body .nav-fade {
+    height: calc(var(--navH, 70px) + 16px);
+  }
+}
+
+/* Touch screens: no custom mouse cursor (it sat in the top left corner) */
+@media (hover: none), (pointer: coarse) {
+  body .cursor-main {
+    display: none;
+  }
+}
+
+/* Tablets in landscape: Contact is tall enough that its title can reach the same spot
+   below the menu as the other sections */
+@media only screen and (min-width: 1025px) and (hover: none),
+  only screen and (min-width: 1025px) and (pointer: coarse) {
+  body .contact-section {
+    min-height: calc(100vh - var(--navH, 74px) - 32px);
+    box-sizing: border-box;
   }
 }

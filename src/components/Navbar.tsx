@@ -12,6 +12,64 @@ import { onWidthResize } from "./utils/widthResize";
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
 
+// Space between the menu bar and a section title after tapping a menu link
+const TITLE_GAP = 32;
+
+// The scroll animations move some sections a little, so once the smooth scroll
+// stops, nudge until the title sits exactly at the target (at most twice).
+// Any touch or wheel from the visitor cancels it.
+let alignToken = 0;
+const alignTitle = (
+  title: HTMLElement,
+  wanted: number,
+  goal: number,
+  tries = 3,
+  prev?: { scroll: number; top: number }
+) => {
+  const token = ++alignToken;
+  const cancel = () => (alignToken += 1);
+  window.addEventListener("touchstart", cancel, { once: true, passive: true });
+  window.addEventListener("wheel", cancel, { once: true, passive: true });
+  const startedAt = performance.now();
+  let last = -1;
+  let still = 0;
+  const check = () => {
+    if (token !== alignToken || performance.now() - startedAt > 5000) return;
+    const now = smoother.scrollTop();
+    still = Math.abs(now - last) < 0.5 ? still + 1 : 0;
+    last = now;
+    // wait until the smooth scroll reached its goal and stopped
+    if (Math.abs(now - goal) > 2 || still < 5) {
+      requestAnimationFrame(check);
+      return;
+    }
+    const top = title.getBoundingClientRect().top;
+    const diff = top - wanted;
+    // How much the title moves per pixel scrolled here (the animations slow it down)
+    let rate = 1;
+    if (prev && Math.abs(now - prev.scroll) > 1) {
+      rate = Math.min(1.5, Math.max(0.2, (prev.top - top) / (now - prev.scroll)));
+    }
+    const next = Math.max(0, Math.round(now + diff / rate));
+    if (Math.abs(diff) > 4 && tries > 0 && next !== Math.round(now)) {
+      smoother.scrollTo(next, true);
+      alignTitle(title, wanted, next, tries - 1, { scroll: now, top });
+    }
+  };
+  requestAnimationFrame(check);
+};
+
+// Position of an element in the page, ignoring the scroll animations' transforms
+const layoutTop = (el: HTMLElement) => {
+  let y = 0;
+  let node: HTMLElement | null = el;
+  while (node) {
+    y += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
+  return y;
+};
+
 // Same "< IG >" logo as the cap: brackets in the color mode, white IG, soft glow
 const CapLogo = () => (
   <svg viewBox="0 0 260 200" aria-hidden="true">
@@ -102,10 +160,30 @@ const Navbar = () => {
         e.preventDefault();
         // On mobile, leave room for the fixed top bar
         const header = document.querySelector(".header") as HTMLElement | null;
+        const navH = header?.offsetHeight ?? 64;
         // One column layout: leave room for the fixed top bar
-        const offset =
-          window.innerWidth <= 1024 ? `top ${header?.offsetHeight ?? 64}px` : "top top";
-        smoother.scrollTo(section, true, offset);
+        if (window.innerWidth <= 1024) {
+          smoother.scrollTo(section, true, `top ${navH}px`);
+          return;
+        }
+        // Tablets in landscape: every section title lands the same distance below the bar.
+        // What I Do keeps "top top" (its cards only show once the character sits down).
+        const target = document.querySelector(section) as HTMLElement | null;
+        const title = target?.querySelector(".section-title") as HTMLElement | null;
+        const touch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+        if (!touch || !target || !title || section === "#whatido") {
+          smoother.scrollTo(section, true, "top top");
+          return;
+        }
+        let y = layoutTop(title) - navH - TITLE_GAP;
+        // About Me: wait until the character has finished moving aside
+        if (section === "#about") {
+          const landing = document.querySelector(".landing-section") as HTMLElement | null;
+          y = Math.max(y, landing?.offsetHeight ?? 0);
+        }
+        y = Math.max(0, Math.round(y));
+        smoother.scrollTo(y, true);
+        alignTitle(title, navH + TITLE_GAP, y);
       });
     });
     onWidthResize(() => ScrollSmoother.refresh(true));

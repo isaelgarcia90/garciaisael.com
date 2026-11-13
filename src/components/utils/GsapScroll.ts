@@ -80,8 +80,10 @@ export function setCharTimeline(
         .fromTo(".character-model", { x: 0 }, { x: "-25%", duration: 1 }, 0)
         .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
         .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
-        // About Me stays invisible behind the character until you scroll to it
-        .fromTo(".about-me", { y: "-50%", opacity: 0 }, { y: "0%", opacity: 1 }, 0);
+        // About Me stays invisible behind the character and only fades in
+        // at the end, once the character has moved aside (no overlap)
+        .fromTo(".about-me", { y: "-50%" }, { y: "0%", duration: 1 }, 0)
+        .fromTo(".about-me", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.75);
 
       tl2
         .to(
