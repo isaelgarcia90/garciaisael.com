@@ -114,6 +114,18 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", close);
   }, [menuOpen]);
 
+  // Mark when the hero is off screen, so the purple corner glows can fade out
+  // on phones and tablets in portrait (they tinted the sections below)
+  useEffect(() => {
+    const landing = document.querySelector(".landing-section");
+    if (!landing) return;
+    const io = new IntersectionObserver(([entry]) =>
+      document.body.classList.toggle("past-landing", !entry.isIntersecting)
+    );
+    io.observe(landing);
+    return () => io.disconnect();
+  }, []);
+
   // Share the bar height with the CSS (--navH), so sections start right below it
   useEffect(() => {
     const header = document.querySelector(".header") as HTMLElement | null;

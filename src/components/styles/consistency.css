@@ -715,7 +715,8 @@ body .carousel-arrow-right {
     width: 100%;
     margin-left: 0;
   }
-  body .career-section.section-container {
+  body .career-section.section-container,
+  body .contact-section.section-container {
     width: 100%;
     max-width: 100%;
   }
@@ -781,5 +782,18 @@ body .carousel-arrow-right {
   }
   body a.contact-social .contact-handle {
     font-size: 17px;
+  }
+}
+
+/* Phones and tablets in portrait: the purple corner glows fade out once the
+   hero is scrolled away, so they never tint What I Do or later sections */
+@media only screen and (max-width: 1024px) {
+  body .landing-circle1,
+  body .landing-circle2 {
+    transition: opacity 0.4s ease;
+  }
+  body.past-landing .landing-circle1,
+  body.past-landing .landing-circle2 {
+    opacity: 0;
   }
 }
