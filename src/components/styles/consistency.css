@@ -796,4 +796,8 @@ body .carousel-arrow-right {
   body.past-landing .landing-circle2 {
     opacity: 0;
   }
+  /* the purple glow behind the character bled into What I Do */
+  body.past-landing .character-rim {
+    visibility: hidden;
+  }
 }
