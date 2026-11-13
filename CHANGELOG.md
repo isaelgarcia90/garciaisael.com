@@ -4,7 +4,24 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 - Cada versión corresponde a un Pull Request (PR) o, en el sitio anterior, a una etapa de trabajo.
 - Cada commit aparece con su hash corto, su fecha y lo que cambió.
-- Total en `main`: 55 commits (47 de trabajo y 8 merges de PR).
+- Total en `main`: 59 commits (49 de trabajo y 10 merges de PR).
+
+---
+
+## [PR #10] CV actualizado en `public/docs` (13 nov 2026)
+
+- Reemplaza el CV anterior `public/Isael_Garcia__CV.pdf` por la versión nueva, ahora en `public/docs/Isael_Garcia_CV.pdf` (4.1 MB).
+- El botón RESUME de la barra (`src/components/Navbar.tsx`) apunta a `/docs/Isael_Garcia_CV.pdf`.
+- La URL anterior `garciaisael.com/Isael_Garcia__CV.pdf` deja de existir.
+- `README.md`: la estructura de carpetas muestra `public/docs/`.
+
+---
+
+## [PR #9] Historial de cambios (13 nov 2026)
+
+Merge `5d81a22`.
+
+- **`72958df`** (13 nov 2026). Agrega este `CHANGELOG.md` con el historial completo del proyecto, desde el sitio estático anterior hasta el PR #8.
 
 ---
 
