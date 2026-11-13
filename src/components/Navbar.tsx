@@ -15,48 +15,37 @@ export let smoother: ScrollSmoother;
 // Space between the menu bar and a section title after tapping a menu link
 const TITLE_GAP = 32;
 
-// The scroll animations move some sections a little, so once the smooth scroll
-// stops, nudge until the title sits exactly at the target (at most twice).
-// Any touch or wheel from the visitor cancels it.
-let alignToken = 0;
-const alignTitle = (
-  title: HTMLElement,
-  wanted: number,
-  goal: number,
-  tries = 3,
-  prev?: { scroll: number; top: number }
-) => {
-  const token = ++alignToken;
-  const cancel = () => (alignToken += 1);
-  window.addEventListener("touchstart", cancel, { once: true, passive: true });
-  window.addEventListener("wheel", cancel, { once: true, passive: true });
-  const startedAt = performance.now();
-  let last = -1;
-  let still = 0;
-  const check = () => {
-    if (token !== alignToken || performance.now() - startedAt > 5000) return;
-    const now = smoother.scrollTop();
-    still = Math.abs(now - last) < 0.5 ? still + 1 : 0;
-    last = now;
-    // wait until the smooth scroll reached its goal and stopped
-    if (Math.abs(now - goal) > 2 || still < 5) {
-      requestAnimationFrame(check);
-      return;
-    }
-    const top = title.getBoundingClientRect().top;
-    const diff = top - wanted;
-    // How much the title moves per pixel scrolled here (the animations slow it down)
-    let rate = 1;
-    if (prev && Math.abs(now - prev.scroll) > 1) {
-      rate = Math.min(1.5, Math.max(0.2, (prev.top - top) / (now - prev.scroll)));
-    }
-    const next = Math.max(0, Math.round(now + diff / rate));
-    if (Math.abs(diff) > 4 && tries > 0 && next !== Math.round(now)) {
-      smoother.scrollTo(next, true);
-      alignTitle(title, wanted, next, tries - 1, { scroll: now, top });
-    }
+// The scroll animations move some sections while you scroll, so the title's
+// final spot can't be read from the layout. Before scrolling, preview the
+// scroll-linked animations at a candidate position (nothing is painted in
+// between), measure the title there, and refine. Then scroll once, straight
+// to the exact spot, with no correction at the end.
+const findTitleScroll = (title: HTMLElement, wanted: number, guess: number, min: number) => {
+  const scrubbed = ScrollTrigger.getAll().filter((t) => t.vars.scrub && t.animation);
+  const saved = scrubbed.map((t) => t.animation!.progress());
+  const current = smoother.scrollTop();
+  const maxScroll = ScrollTrigger.maxScroll(window);
+  const clampScroll = (s: number) => Math.min(maxScroll, Math.max(min, s));
+  // where the title would sit on screen if the page were scrolled to s
+  const titleTopAt = (s: number) => {
+    scrubbed.forEach((t) => {
+      const span = t.end - t.start || 1;
+      t.animation!.progress(Math.min(1, Math.max(0, (s - t.start) / span)));
+    });
+    return title.getBoundingClientRect().top + current - s;
   };
-  requestAnimationFrame(check);
+  let s0 = clampScroll(guess);
+  let f0 = titleTopAt(s0) - wanted;
+  let s1 = clampScroll(s0 + f0);
+  for (let i = 0; i < 6 && Math.abs(f0) > 1 && s1 !== s0; i++) {
+    const f1 = titleTopAt(s1) - wanted;
+    const slope = (f0 - f1) / (s1 - s0) || 1;
+    s0 = s1;
+    f0 = f1;
+    s1 = clampScroll(s1 + f1 / Math.min(1.5, Math.max(0.2, slope)));
+  }
+  scrubbed.forEach((t, i) => t.animation!.progress(saved[i]));
+  return Math.round(s0);
 };
 
 // Position of an element in the page, ignoring the scroll animations' transforms
@@ -175,15 +164,11 @@ const Navbar = () => {
           smoother.scrollTo(section, true, "top top");
           return;
         }
-        let y = layoutTop(title) - navH - TITLE_GAP;
-        // About Me: wait until the character has finished moving aside
-        if (section === "#about") {
-          const landing = document.querySelector(".landing-section") as HTMLElement | null;
-          y = Math.max(y, landing?.offsetHeight ?? 0);
-        }
-        y = Math.max(0, Math.round(y));
-        smoother.scrollTo(y, true);
-        alignTitle(title, navH + TITLE_GAP, y);
+        // About Me: never stop before the character has finished moving aside
+        const landing = document.querySelector(".landing-section") as HTMLElement | null;
+        const min = section === "#about" ? landing?.offsetHeight ?? 0 : 0;
+        const guess = layoutTop(title) - navH - TITLE_GAP;
+        smoother.scrollTo(findTitleScroll(title, navH + TITLE_GAP, guess, min), true);
       });
     });
     onWidthResize(() => ScrollSmoother.refresh(true));
