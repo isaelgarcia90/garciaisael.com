@@ -4,14 +4,18 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 - Cada versión corresponde a un Pull Request (PR) o, en el sitio anterior, a una etapa de trabajo.
 - Cada commit aparece con su hash corto, su fecha y lo que cambió.
-- Total en `main`: 64 commits (52 de trabajo y 12 merges de PR).
+- Total en `main`: 65 commits (53 de trabajo y 12 merges de PR).
 
 ---
 
-## [PR #12] CV con logros redactados por impacto (13 nov 2026)
+## [PR #12] CV reescrito con la fórmula X-Y-Z (13 nov 2026)
 
 - Reemplaza `public/docs/Isael_Garcia_CV.pdf` por la versión nueva (mismo nombre y ruta, 4.1 MB, 1 página). El botón RESUME no cambia.
-- El contenido es el mismo, pero cada logro ahora empieza por el resultado (por ejemplo, "Shipped a headlamp Showroom Mode feature in production Ford vehicles…" y "Defined 500+ software requirements across 5 systems…").
+- Las viñetas de experiencia se reescribieron con la fórmula X-Y-Z:
+  - **X (logro o resultado):** qué se consiguió.
+  - **Y (métrica o impacto):** cómo se midió, con números, porcentajes o KPIs.
+  - **Z (acción o estrategia):** qué se hizo exactamente o qué herramientas se usaron.
+- Ejemplos: "Shipped a headlamp Showroom Mode feature in production Ford vehicles, developed in C and Python across the full SDLC" y "Defined 500+ software requirements across 5 systems of Renault's electric vehicle platform…".
 - Los textos del sitio (Career, Work) no copian las viñetas del CV, así que no cambian.
 
 ---
