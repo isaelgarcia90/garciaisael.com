@@ -4,11 +4,21 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 - Cada versión corresponde a un Pull Request (PR) o, en el sitio anterior, a una etapa de trabajo.
 - Cada commit aparece con su hash corto, su fecha y lo que cambió.
-- Total en `main`: 65 commits (53 de trabajo y 12 merges de PR).
+- Total en `main`: 68 commits (54 de trabajo y 14 merges de PR).
+
+---
+
+## [PR #13] CV: sección SUMMARY y títulos más legibles (13 nov 2026)
+
+- Reemplaza `public/docs/Isael_Garcia_CV.pdf` (misma ruta, 1 página).
+- El título "PROFESSIONAL SUMMARY" ahora es "SUMMARY".
+- Se ajustó el tamaño de los títulos de sección para que se lean mejor. El resto del contenido no cambia.
 
 ---
 
 ## [PR #12] CV reescrito con la fórmula X-Y-Z (13 nov 2026)
+
+Merge `c8635d4`.
 
 - Reemplaza `public/docs/Isael_Garcia_CV.pdf` por la versión nueva (mismo nombre y ruta, 4.1 MB, 1 página). El botón RESUME no cambia.
 - Las viñetas de experiencia se reescribieron con la fórmula X-Y-Z:
