@@ -31,17 +31,18 @@
   cursor: pointer;
 }
 /* Theme menu with RESUME right below it, always in the same place */
+/* RESUME sits next to the theme menu at every size */
 .header-stack {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
 }
 .navbar-resume {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding-left: 10px;
+  padding-left: 0;
   font-size: 13px;
   line-height: 1;
   letter-spacing: 3px;
@@ -197,5 +198,16 @@
   .header ul {
     column-gap: 24px;
     font-size: 14px;
+  }
+}
+
+/* Small phones: tighter so logo, theme, RESUME and the menu button fit in one row */
+@media only screen and (max-width: 420px) {
+  .header-stack {
+    gap: 10px;
+  }
+  .navbar-resume {
+    font-size: 11px;
+    letter-spacing: 1.5px;
   }
 }
