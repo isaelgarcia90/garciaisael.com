@@ -4,13 +4,23 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 - Cada versión corresponde a un Pull Request (PR) o, en el sitio anterior, a una etapa de trabajo.
 - Cada commit aparece con su hash corto, su fecha y lo que cambió.
-- Total en `main`: 59 commits (49 de trabajo y 10 merges de PR).
+- Total en `main`: 62 commits (51 de trabajo y 11 merges de PR).
+
+---
+
+## [PR #11] Brackets en los dientes del personaje (13 nov 2026)
+
+- **`03e9c89`** (13 nov 2026). El personaje ahora tiene brackets: 6 por arcada (arriba y abajo), unidos por un alambre. Se dibujan en código en `src/components/Character/utils/character.ts` (función `addBraces`), sin tocar el modelo 3D, y van sujetos al hueso de la cabeza para seguir todas las animaciones.
+- Brackets y alambre son plateados; la liga de cada bracket toma el color del modo activo (Galaxy, Sky, Hacker, Retro Terminal, Kernel Panic, Clean Code).
+- No cambia `ASSET_VERSION`: el modelo `character.enc` es el mismo.
 
 ---
 
 ## [PR #10] CV actualizado en `public/docs` (13 nov 2026)
 
-- Reemplaza el CV anterior `public/Isael_Garcia__CV.pdf` por la versión nueva, ahora en `public/docs/Isael_Garcia_CV.pdf` (4.1 MB).
+Merge `f20515d`.
+
+- **`c260eae`** (12 nov 2026). Reemplaza el CV anterior `public/Isael_Garcia__CV.pdf` por la versión nueva, ahora en `public/docs/Isael_Garcia_CV.pdf` (4.1 MB).
 - El botón RESUME de la barra (`src/components/Navbar.tsx`) apunta a `/docs/Isael_Garcia_CV.pdf`.
 - La URL anterior `garciaisael.com/Isael_Garcia__CV.pdf` deja de existir.
 - `README.md`: la estructura de carpetas muestra `public/docs/`.
