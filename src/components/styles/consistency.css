@@ -120,7 +120,7 @@ body .header ul li a {
   body .career-section,
   body .work-section,
   body .contact-section {
-    min-height: calc(100svh - var(--navH, 64px));
+    min-height: calc(100lvh - var(--navH, 64px));
     box-sizing: border-box;
     padding-top: 28px;
     padding-bottom: 28px;
@@ -446,7 +446,7 @@ body .work-image img {
 }
 
 /* ── Tablets in portrait: same design as phones, larger type ── */
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
   body .section-title,
   body .about-me h3.section-title,
   body .what-box h2.section-title,
@@ -678,10 +678,10 @@ body .carousel-arrow-right {
   }
 }
 
-/* ── Tablets in portrait (768–1024px): bigger type, one shared width for every
+/* ── Tablets in portrait (600–1024px): bigger type, one shared width for every
    section (cards and timeline included) and no screen-tall empty sections.
    Wider screens (tablet landscape, desktop) are not affected. ── */
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
   /* Hero */
   body .landing-intro h2,
   body .landing-info h3 {
@@ -719,19 +719,17 @@ body .carousel-arrow-right {
     width: 100%;
     max-width: 100%;
   }
-  /* Contact can still scroll up to the top when tapped in the menu */
-  body .contact-section {
-    min-height: calc(100svh - var(--navH, 64px));
-  }
 
-  /* Sections only as tall as their content */
+  /* Each section fills the whole screen (browser bar hidden too), so a menu
+     jump shows only that section */
   body .about-section,
   body .whatIDO,
   body .career-section,
-  body .work-section {
-    min-height: 0;
-    padding-top: 56px;
-    padding-bottom: 56px;
+  body .work-section,
+  body .contact-section {
+    min-height: calc(100lvh - var(--navH, 64px));
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
 
   /* Type */
