@@ -394,3 +394,80 @@
     line-height: 6.8rem;
   }
 }
+
+/* ── Phones and tablets in portrait: compact cards, skills always visible (no tap to expand) ── */
+@media only screen and (max-width: 1024px) {
+  .whatIDO {
+    padding: 30px 0px;
+  }
+  .what-box,
+  .what-box:last-child {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+  .what-box h2 {
+    font-size: 36px;
+    line-height: 36px;
+    margin: 10px 0 24px;
+  }
+  .what-box-in {
+    display: flex !important;
+    height: auto;
+    width: 100%;
+    gap: 14px;
+  }
+  .what-border1,
+  .what-border2,
+  .what-corner,
+  .what-arrow,
+  .what-content::before,
+  .what-content::after {
+    display: none;
+  }
+  .what-content,
+  .what-noTouch:hover,
+  .what-content-active,
+  .what-content.what-sibling,
+  .what-box-in:hover .what-noTouch:not(:hover),
+  .what-noTouch:hover ~ .what-content {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .what-content-in {
+    opacity: 1;
+    animation: none;
+  }
+  .what-content h3 {
+    font-size: 18px;
+  }
+  .what-content h4 {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .what-content p {
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 300;
+    letter-spacing: 0.2px;
+    text-align: justify;
+    hyphens: auto;
+    margin: 10px 0;
+  }
+  .what-content h5,
+  .what-content-flex {
+    opacity: 1;
+  }
+  .what-content h5 {
+    margin: 12px 0 8px;
+    font-size: 12px;
+  }
+  .what-tags {
+    font-size: 11px;
+  }
+}

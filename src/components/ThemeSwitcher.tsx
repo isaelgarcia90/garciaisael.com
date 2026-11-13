@@ -11,6 +11,16 @@ const ThemeSwitcher = () => {
 
   useEffect(() => onThemeChange(setCurrent), []);
 
+  // Only one dropdown open at a time (color mode menu vs. section menu)
+  useEffect(() => {
+    if (open) window.dispatchEvent(new CustomEvent("dropdownopen", { detail: "theme" }));
+    const onOther = (e: Event) => {
+      if ((e as CustomEvent<string>).detail !== "theme") setOpen(false);
+    };
+    window.addEventListener("dropdownopen", onOther);
+    return () => window.removeEventListener("dropdownopen", onOther);
+  }, [open]);
+
   // Close the menu when clicking outside of it
   useEffect(() => {
     if (!open) return;

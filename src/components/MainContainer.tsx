@@ -1,4 +1,4 @@
-import { lazy, PropsWithChildren, Suspense, useEffect, useState } from "react";
+import { lazy, PropsWithChildren, Suspense, useEffect, useRef, useState } from "react";
 import About from "./About";
 import Career from "./Career";
 import Contact from "./Contact";
@@ -9,10 +9,39 @@ import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
+import { onWidthResize } from "./utils/widthResize";
 import { initialFX } from "./utils/initialFX";
 import { notifyVisit, trackSectionViews } from "./utils/analytics";
+import { MdScreenRotation } from "react-icons/md";
 
 const TechStack = lazy(() => import("./TechStack"));
+
+// The Techstack 3D scene (and its textures) only downloads when the visitor
+// gets within one screen of it; until then an empty box of the same size holds its place.
+const DeferredTechStack = () => {
+  const slot = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    if (near || !slot.current) return;
+    const io = new IntersectionObserver(
+      ([e]) => e.isIntersecting && setNear(true),
+      { rootMargin: "100% 0px" }
+    );
+    io.observe(slot.current);
+    return () => io.disconnect();
+  }, [near]);
+  if (!near) return <div className="techstack" ref={slot} />;
+  return (
+    <Suspense fallback={<div className="techstack" />}>
+      <TechStack />
+    </Suspense>
+  );
+};
+
+// Rotate notice in the visitor's language: Spanish phones get Spanish
+const ROTATE_TEXT = (navigator.language || "").toLowerCase().startsWith("es")
+  ? "Gira tu teléfono a vertical"
+  : "Rotate your phone to portrait";
 
 const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
@@ -25,10 +54,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       setIsDesktopView(window.innerWidth > 1024);
     };
     resizeHandler();
-    window.addEventListener("resize", resizeHandler);
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
+    return onWidthResize(resizeHandler);
   }, [isDesktopView]);
 
   // Google Analytics: report which sections each visitor reaches
@@ -44,6 +70,11 @@ const MainContainer = ({ children }: PropsWithChildren) => {
 
   return (
     <div className="container-main">
+      {/* Phones turned sideways: ask to go back to portrait (shown only by CSS) */}
+      <div className="rotate-notice" aria-hidden="true">
+        <MdScreenRotation />
+        <p>{ROTATE_TEXT}</p>
+      </div>
       <Cursor />
       <Navbar />
       <SocialIcons />
@@ -56,11 +87,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <WhatIDo />
             <Career />
             <Work />
-            {isDesktopView && (
-              <Suspense fallback={<div>Loading....</div>}>
-                <TechStack />
-              </Suspense>
-            )}
+            {isDesktopView && <DeferredTechStack />}
             <Contact />
           </div>
         </div>

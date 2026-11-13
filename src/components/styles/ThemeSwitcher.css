@@ -1,6 +1,6 @@
 .header-left {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   align-self: flex-start;
 }
@@ -79,7 +79,7 @@
 }
 @media only screen and (min-width: 500px) {
   .header-left {
-    align-self: center;
+    align-self: flex-start;
     gap: 24px;
   }
 }
@@ -90,5 +90,19 @@
   .theme-switcher-name,
   .theme-switcher-chevron {
     display: inline;
+  }
+}
+
+/* Phones: keep the mode name visible (small) so the button invites a tap */
+@media only screen and (max-width: 899px) {
+  .theme-switcher-button {
+    padding: 5px 10px;
+    gap: 6px;
+  }
+  .theme-switcher-name,
+  .theme-switcher-chevron {
+    display: inline;
+    font-size: 10px;
+    letter-spacing: 1.5px;
   }
 }

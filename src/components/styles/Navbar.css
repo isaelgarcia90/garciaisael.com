@@ -30,20 +30,50 @@
   font-weight: 600;
   cursor: pointer;
 }
-.navbar-connect {
-  position: absolute;
+/* Theme menu with RESUME right below it, always in the same place */
+/* RESUME sits next to the theme menu at every size */
+.header-stack {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+.navbar-resume {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 0;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 3px;
+  font-weight: 600;
+  color: var(--accentColor);
+  transition: color 0.3s ease;
+}
+.navbar-resume svg {
+  font-size: 1.2em;
+}
+.navbar-resume:hover {
+  color: #fff;
+}
+.menu-toggle {
   display: none;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 15px;
-  letter-spacing: 1px;
-  font-weight: 500;
 }
 .navbar-title {
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  color: var(--accentColor);
+  transition: filter 0.3s ease;
+}
+.navbar-title svg {
+  height: 30px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(var(--accentRgb), 0.55));
+}
+.navbar-title:hover svg {
+  filter: drop-shadow(0 0 10px rgba(var(--accentRgb), 0.9));
 }
 @media only screen and (min-width: 500px) {
   .header {
@@ -57,27 +87,127 @@
   .header ul li {
     color: #eae5ec;
   }
-  .navbar-title {
-    font-size: 16px;
-  }
-}
-@media only screen and (min-width: 900px) {
-  .navbar-connect {
-    display: block;
-  }
 }
 @media only screen and (min-width: 1200px) {
   .header {
     padding: 35px 0px;
   }
   .header ul {
-    column-gap: 80px;
-    font-size: 16px;
+    column-gap: 36px;
+    font-size: 15px;
   }
-  .navbar-connect {
-    font-size: 16px;
+}
+
+/* ── Mobile: one-row bar with a menu button ── */
+@media only screen and (max-width: 1024px) {
+  .header {
+    padding: 12px 0px;
+    align-items: center;
   }
-  .navbar-title {
-    font-size: 18px;
+  .header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    /* Solid bar: a blur behind a fixed bar repaints on every scroll frame */
+    background: rgba(10, 14, 23, 0.97);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    z-index: -1;
+  }
+  .header-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-right: -8px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: #eae5ec;
+    font-size: 26px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .header ul {
+    display: none;
+  }
+  .header.menu-open ul {
+    display: flex;
+    position: absolute;
+    top: calc(100% + 14px);
+    right: -4px;
+    flex-direction: column;
+    align-items: flex-end;
+    row-gap: 22px;
+    min-width: 180px;
+    padding: 20px 22px;
+    font-size: 15px;
+    background: rgba(10, 14, 23, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  }
+  .header.menu-open ul li {
+    color: #eae5ec;
+    letter-spacing: 2px;
+  }
+  .header {
+    align-items: flex-start;
+  }
+  .header-right {
+    height: 34px;
+  }
+  .navbar-resume {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+  .header-stack {
+    gap: 8px;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .navbar-title svg {
+    height: 40px;
+  }
+}
+
+/* Wide screens: RESUME sits right beside the theme menu */
+@media only screen and (min-width: 1025px) {
+  .header-stack {
+    flex-direction: row;
+    align-items: center;
+    gap: 22px;
+  }
+  .navbar-resume {
+    padding-left: 0;
+  }
+}
+/* Tablets in landscape and small laptops: tighter section menu, pushed to the right */
+@media only screen and (min-width: 1025px) and (max-width: 1400px) {
+  .header ul {
+    column-gap: 24px;
+    font-size: 14px;
+  }
+}
+
+/* Small phones: tighter so logo, theme, RESUME and the menu button fit in one row */
+@media only screen and (max-width: 420px) {
+  .header-stack {
+    gap: 10px;
+  }
+  .navbar-resume {
+    font-size: 11px;
+    letter-spacing: 1.5px;
   }
 }

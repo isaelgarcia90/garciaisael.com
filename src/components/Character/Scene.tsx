@@ -4,6 +4,7 @@ import setCharacter from "./utils/character";
 import setLighting from "./utils/lighting";
 import { useLoading } from "../../context/LoadingProvider";
 import handleResize from "./utils/resizeUtils";
+import { onWidthResize } from "../utils/widthResize";
 import {
   handleMouseMove,
   handleTouchEnd,
@@ -20,7 +21,7 @@ const Scene = () => {
   const sceneRef = useRef(new THREE.Scene());
   const { setLoading } = useLoading();
 
-  const [character, setChar] = useState<THREE.Object3D | null>(null);
+  const [, setChar] = useState<THREE.Object3D | null>(null);
   useEffect(() => {
     if (canvasDiv.current) {
       let rect = canvasDiv.current.getBoundingClientRect();
@@ -33,7 +34,10 @@ const Scene = () => {
         antialias: true,
       });
       renderer.setSize(container.width, container.height);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      // Phones report 3x pixel density; 1.5x looks the same and draws far fewer pixels
+      const isTouch = window.matchMedia("(pointer: coarse)").matches;
+      const maxDpr = window.innerWidth <= 1024 || isTouch ? 1.5 : 2;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
       canvasDiv.current.appendChild(renderer.domElement);
@@ -49,6 +53,19 @@ const Scene = () => {
       let mixer: THREE.AnimationMixer;
 
       const clock = new THREE.Clock();
+      let resizeTimer: number | undefined;
+      let stopResize = () => {};
+
+      // Keep the 3D view exactly the size of its box, whatever the screen or
+      // orientation does (tablets rotating, browser bars showing/hiding)
+      const fitToBox = new ResizeObserver(([entry]) => {
+        const { width, height } = entry.contentRect;
+        if (!width || !height) return;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      });
+      fitToBox.observe(canvasDiv.current);
 
       const light = setLighting(scene);
       let progress = setProgress((value) => setLoading(value));
@@ -71,9 +88,15 @@ const Scene = () => {
               initialFX(); // texts, menu and scroll appear when the lights turn on
             }, 3000);
           });
-          window.addEventListener("resize", () =>
-            handleResize(renderer, camera, canvasDiv, character)
-          );
+          // Rebuild the scroll animations once the size settles (rotation fires
+          // several resize events while the browser is still changing layout)
+          stopResize = onWidthResize(() => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(
+              () => handleResize(renderer, camera, canvasDiv, character),
+              250
+            );
+          });
         }
       });
 
@@ -84,16 +107,19 @@ const Scene = () => {
         handleMouseMove(event, (x, y) => (mouse = { x, y }));
       };
       let debounce: number | undefined;
-      const onTouchStart = (event: TouchEvent) => {
-        const element = event.target as HTMLElement;
-        debounce = setTimeout(() => {
-          element?.addEventListener("touchmove", (e: TouchEvent) =>
-            handleTouchMove(e, (x, y) => (mouse = { x, y }))
-          );
-        }, 200);
+      // Follow the finger only after a short hold (one listener, not one per touch)
+      let followTouch = false;
+      const onTouchStart = () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => (followTouch = true), 200);
+      };
+      const onTouchMove = (e: TouchEvent) => {
+        if (followTouch) handleTouchMove(e, (x, y) => (mouse = { x, y }));
       };
 
       const onTouchEnd = () => {
+        clearTimeout(debounce);
+        followTouch = false;
         handleTouchEnd((x, y, interpolationX, interpolationY) => {
           mouse = { x, y };
           interpolation = { x: interpolationX, y: interpolationY };
@@ -105,11 +131,25 @@ const Scene = () => {
       });
       const landingDiv = document.getElementById("landingDiv");
       if (landingDiv) {
-        landingDiv.addEventListener("touchstart", onTouchStart);
+        landingDiv.addEventListener("touchstart", onTouchStart, { passive: true });
+        landingDiv.addEventListener("touchmove", onTouchMove, { passive: true });
         landingDiv.addEventListener("touchend", onTouchEnd);
       }
+
+      // Stop drawing the 3D scene while it is off screen
+      let onScreen = true;
+      const visibility = new IntersectionObserver(([entry]) => {
+        onScreen = entry.isIntersecting;
+      });
+      visibility.observe(canvasDiv.current);
+      let frame = 0;
       const animate = () => {
-        requestAnimationFrame(animate);
+        frame = requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+        // One-column layout: the character scrolls away, so stop drawing it off screen.
+        // Desktop/tablet landscape: it is fixed and moved by the scroll animation; always draw it
+        // (pausing there froze it on screen and made it appear/disappear late).
+        if (document.hidden || (!onScreen && window.innerWidth <= 1024)) return;
         if (headBone) {
           handleHeadRotation(
             headBone,
@@ -121,7 +161,6 @@ const Scene = () => {
           );
           light.setPointLight(screenLight);
         }
-        const delta = clock.getDelta();
         if (mixer) {
           mixer.update(delta);
         }
@@ -130,17 +169,20 @@ const Scene = () => {
       animate();
       return () => {
         clearTimeout(debounce);
+        cancelAnimationFrame(frame);
+        clearTimeout(resizeTimer);
+        fitToBox.disconnect();
+        visibility.disconnect();
         scene.clear();
         renderer.dispose();
-        window.removeEventListener("resize", () =>
-          handleResize(renderer, camera, canvasDiv, character!)
-        );
+        stopResize();
         if (canvasDiv.current) {
           canvasDiv.current.removeChild(renderer.domElement);
         }
         if (landingDiv) {
           document.removeEventListener("mousemove", onMouseMove);
           landingDiv.removeEventListener("touchstart", onTouchStart);
+          landingDiv.removeEventListener("touchmove", onTouchMove);
           landingDiv.removeEventListener("touchend", onTouchEnd);
         }
       };

@@ -2,14 +2,21 @@ import * as THREE from "three";
 import gsap from "gsap";
 import { getTheme, lightTint, onThemeChange } from "../../theme/theme";
 
+let intensity = 0;
+let flickerStarted = false;
+
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
   camera: THREE.PerspectiveCamera
 ) {
-  let intensity: number = 0;
-  setInterval(() => {
-    intensity = Math.random();
-  }, 200);
+  // Screen flicker loop: start it only once (this runs again on every resize)
+  const startFlicker = !flickerStarted;
+  flickerStarted = true;
+  if (startFlicker) {
+    setInterval(() => {
+      intensity = Math.random();
+    }, 200);
+  }
   const tl1 = gsap.timeline({
     scrollTrigger: {
       trigger: ".landing-section",
@@ -52,13 +59,15 @@ export function setCharTimeline(
     if (object.name === "screenlight") {
       object.material.transparent = true;
       object.material.opacity = 0;
-      object.material.emissive.set(lightTint(getTheme())); // screen glow follows the color mode
-      onThemeChange((theme) => object.material.emissive.set(lightTint(theme)));
-      gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
-        emissiveIntensity: () => intensity * 8,
-        duration: () => Math.random() * 0.6,
-        delay: () => Math.random() * 0.1,
-      });
+      if (startFlicker) {
+        object.material.emissive.set(lightTint(getTheme())); // screen glow follows the color mode
+        onThemeChange((theme) => object.material.emissive.set(lightTint(theme)));
+        gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
+          emissiveIntensity: () => intensity * 8,
+          duration: () => Math.random() * 0.6,
+          delay: () => Math.random() * 0.1,
+        });
+      }
       screenLight = object;
     }
   });
@@ -71,7 +80,10 @@ export function setCharTimeline(
         .fromTo(".character-model", { x: 0 }, { x: "-25%", duration: 1 }, 0)
         .to(".landing-container", { opacity: 0, duration: 0.4 }, 0)
         .to(".landing-container", { y: "40%", duration: 0.8 }, 0)
-        .fromTo(".about-me", { y: "-50%" }, { y: "0%" }, 0);
+        // About Me stays invisible behind the character and only fades in
+        // at the end, once the character has moved aside (no overlap)
+        .fromTo(".about-me", { y: "-50%" }, { y: "0%", duration: 1 }, 0)
+        .fromTo(".about-me", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.75);
 
       tl2
         .to(

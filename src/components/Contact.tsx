@@ -5,37 +5,10 @@ const Contact = () => {
   return (
     <div className="contact-section section-container" id="contact">
       <div className="contact-container">
-        <h3>Contact</h3>
+        <h3 className="section-title">Contact</h3>
         <div className="contact-flex">
           <div className="contact-box">
             <h4>Connect</h4>
-            <p>
-              <a
-                href="https://www.linkedin.com/in/isaelgarcia90"
-                target="_blank"
-                rel="noreferrer"
-                data-cursor="disable"
-              >
-                LinkedIn — isaelgarcia90
-              </a>
-            </p>
-            <p>
-              <a
-                href="mailto:isael.garcia_90@hotmail.com"
-                data-cursor="disable"
-              >
-                isael.garcia_90@hotmail.com
-              </a>
-            </p>
-            <h4>Education</h4>
-            <p>
-              M.Sc. Computer Science, Autonomous University of Guadalajara (UAG) — 2016 - 2018
-              <br />
-              B.S. Electronics and Communications Engineering, National Polytechnic Institute (IPN) — 2008 - 2012
-            </p>
-          </div>
-          <div className="contact-box">
-            <h4>Social</h4>
             <a
               href="https://www.linkedin.com/in/isaelgarcia90"
               target="_blank"
@@ -43,7 +16,7 @@ const Contact = () => {
               data-cursor="disable"
               className="contact-social"
             >
-              LinkedIn <MdArrowOutward />
+              LinkedIn <span className="contact-handle">@isaelgarcia90</span> <MdArrowOutward />
             </a>
             <a
               href="https://github.com/isaelgarcia90"
@@ -52,7 +25,7 @@ const Contact = () => {
               data-cursor="disable"
               className="contact-social"
             >
-              GitHub <MdArrowOutward />
+              GitHub <span className="contact-handle">@isaelgarcia90</span> <MdArrowOutward />
             </a>
             <a
               href="https://www.instagram.com/isaelgarcia.ia"
@@ -61,8 +34,19 @@ const Contact = () => {
               data-cursor="disable"
               className="contact-social"
             >
-              Instagram <MdArrowOutward />
+              Instagram <span className="contact-handle">@isaelgarcia.ia</span> <MdArrowOutward />
             </a>
+            <h4>Education</h4>
+            <div className="contact-degree">
+              <p>M.Sc. Computer Science</p>
+              <span>Autonomous University of Guadalajara (UAG)</span>
+              <span className="contact-years">2016 – 2018</span>
+            </div>
+            <div className="contact-degree">
+              <p>B.S. Electronics and Communications Engineering</p>
+              <span>National Polytechnic Institute (IPN)</span>
+              <span className="contact-years">2008 – 2012</span>
+            </div>
           </div>
           <div className="contact-box">
             <h2>
