@@ -60,7 +60,7 @@ public/
   models/           3D character (encrypted GLB) and HDR environment
   draco/            Draco decoder for the compressed model
   images/           Tech stack logos and project screenshots
-  Isael_Garcia__CV.pdf
+  docs/             Public PDFs: CV (Isael_Garcia_CV.pdf) and The Freescale Cup documents
 src/
   components/       One component per section (Landing, About, Career, Work...)
     Character/      Three.js scene: loading, lighting, animations, mouse tracking

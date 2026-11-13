@@ -201,7 +201,7 @@ const Navbar = () => {
           <div className="header-stack">
             <ThemeSwitcher />
             <a
-              href="/Isael_Garcia__CV.pdf"
+              href="/docs/Isael_Garcia_CV.pdf"
               className="navbar-resume"
               data-cursor="disable"
               target="_blank"
