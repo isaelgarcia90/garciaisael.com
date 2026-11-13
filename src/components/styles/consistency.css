@@ -677,3 +677,111 @@ body .carousel-arrow-right {
     box-sizing: border-box;
   }
 }
+
+/* ── Tablets in portrait (768–1024px): bigger type, one shared width for every
+   section (cards and timeline included) and no screen-tall empty sections.
+   Wider screens (tablet landscape, desktop) are not affected. ── */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  /* Hero */
+  body .landing-intro h2,
+  body .landing-info h3 {
+    font-size: 30px;
+  }
+  body .landing-intro h1 {
+    font-size: 56px;
+    line-height: 58px;
+  }
+  body .landing-info h2 {
+    font-size: 56px;
+    line-height: 60px;
+  }
+  body h2.landing-info-h2 {
+    font-size: 66px;
+  }
+
+  /* One width for all sections */
+  body .about-me,
+  body .what-box,
+  body .whatIDO .what-box:last-child,
+  body .career-section .career-container,
+  body .work-container,
+  body .contact-container {
+    width: 680px;
+    max-width: calc(100% - 64px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  body .whatIDO .what-box-in {
+    width: 100%;
+    margin-left: 0;
+  }
+  body .career-section.section-container {
+    width: 100%;
+    max-width: 100%;
+  }
+  /* Contact can still scroll up to the top when tapped in the menu */
+  body .contact-section {
+    min-height: calc(100svh - var(--navH, 64px));
+  }
+
+  /* Sections only as tall as their content */
+  body .about-section,
+  body .whatIDO,
+  body .career-section,
+  body .work-section {
+    min-height: 0;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  /* Type */
+  body .section-title,
+  body .about-me h3.section-title,
+  body .what-box h2.section-title,
+  body .career-section h2.section-title,
+  body .work-section h2.section-title,
+  body .contact-section h3.section-title {
+    font-size: 44px;
+    margin-bottom: 30px;
+  }
+  body .about-me p,
+  body .what-content p,
+  body .career-info-box p,
+  body .carousel-category,
+  body .carousel-tools p,
+  body .contact-flex p,
+  body .contact-flex p a {
+    font-size: 20px;
+    line-height: 32px;
+  }
+  body .what-content h3,
+  body .career-info .career-role h4,
+  body .carousel-details h4,
+  body .contact-flex .contact-degree p {
+    font-size: 26px;
+    line-height: 34px;
+  }
+  body .what-content h4,
+  body .what-content h5,
+  body .career-info .career-role h5,
+  body .career-info-in > h4,
+  body .career-info-in > h5,
+  body .carousel-tools .tools-label,
+  body .carousel-number h3,
+  body .contact-flex h4,
+  body .contact-degree span {
+    font-size: 17px;
+    line-height: 25px;
+  }
+  body .what-tags {
+    font-size: 15px;
+    padding: 5px 13px;
+  }
+  body a.contact-social {
+    font-size: 22px;
+    padding: 14px 0;
+  }
+  body a.contact-social .contact-handle {
+    font-size: 17px;
+  }
+}
