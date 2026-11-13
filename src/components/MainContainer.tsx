@@ -38,6 +38,11 @@ const DeferredTechStack = () => {
   );
 };
 
+// Rotate notice in the visitor's language: Spanish phones get Spanish
+const ROTATE_TEXT = (navigator.language || "").toLowerCase().startsWith("es")
+  ? "Gira tu teléfono a vertical"
+  : "Rotate your phone to portrait";
+
 const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
     window.innerWidth > 1024
@@ -68,7 +73,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       {/* Phones turned sideways: ask to go back to portrait (shown only by CSS) */}
       <div className="rotate-notice" aria-hidden="true">
         <MdScreenRotation />
-        <p>Rotate your phone to portrait</p>
+        <p>{ROTATE_TEXT}</p>
       </div>
       <Cursor />
       <Navbar />
