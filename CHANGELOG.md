@@ -8,6 +8,17 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 ---
 
+## [PR #14] Formulario "Get a quote for your AI project" (24 nov 2026)
+
+- Nuevo bloque **Work with me** al inicio de la sección Contact, con el botón "Get a quote for your AI project".
+- El botón abre un formulario (ventana sobre la página) con nombre, correo, empresa opcional y las 4 preguntas de negocio: objetivo principal, resultados esperados en el día a día, plazo ideal (lista) y si los datos ya están organizados (lista, con detalle opcional).
+- Las respuestas llegan a Discord con la nueva función `api/quote.ts`. Usa `DISCORD_QUOTE_WEBHOOK_URL` si existe (para un canal #cotizaciones aparte) y si no, el mismo `DISCORD_WEBHOOK_URL` de las visitas.
+- Protección: solo acepta envíos desde garciaisael.com y los previews de Vercel del proyecto, valida los campos y descarta bots con un campo oculto.
+- Nuevos eventos de Google Analytics: `quote_open` y `quote_submit` (con `timeline` y `data`).
+- Archivos: `src/components/QuoteForm.tsx`, `src/components/styles/QuoteForm.css`, `api/quote.ts`, `src/components/Contact.tsx`.
+
+---
+
 ## [PR #13] CV: sección SUMMARY y títulos más legibles (13 nov 2026)
 
 - Reemplaza `public/docs/Isael_Garcia_CV.pdf` (misma ruta, 1 página).
