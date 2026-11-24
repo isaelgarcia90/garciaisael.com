@@ -234,3 +234,25 @@
     width: 100%;
   }
 }
+
+/* Required / optional marks and field errors */
+.quote-req {
+  font-weight: 600;
+  color: var(--accentColor);
+}
+.quote-legend {
+  margin: -6px 0 0;
+  font-size: 13px;
+  opacity: 0.7;
+}
+.quote-field-error {
+  font-size: 13px;
+  color: #ff8a8a;
+}
+.quote-dialog [aria-invalid="true"] {
+  border-color: #ff8a8a;
+}
+.quote-dialog [aria-invalid="true"]:focus {
+  border-color: #ff8a8a;
+  box-shadow: 0 0 0 3px rgba(255, 138, 138, 0.2);
+}

@@ -8,11 +8,46 @@ import { OPEN_QUOTE_EVENT, openQuoteForm } from "./utils/quoteForm";
 import "./styles/QuoteForm.css";
 
 type Status = "idle" | "sending" | "sent" | "error";
+type Errors = Partial<Record<string, string>>;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const MIN_ANSWER = 10; // shortest useful answer for the two open questions
+
+// Required fields, checked in screen order so the first error gets the focus
+function validate(d: Record<string, string>): Errors {
+  const e: Errors = {};
+  if (d.name.length < 2) e.name = "Please enter your name.";
+  if (!d.email) e.email = "Please enter your email.";
+  else if (!EMAIL_RE.test(d.email)) e.email = "Please enter a valid email, like name@company.com.";
+  if (!d.goal) e.goal = "Please tell me your main goal.";
+  else if (d.goal.length < MIN_ANSWER) e.goal = `Please add a bit more detail (at least ${MIN_ANSWER} characters).`;
+  if (!d.results) e.results = "Please describe the results you expect.";
+  else if (d.results.length < MIN_ANSWER)
+    e.results = `Please add a bit more detail (at least ${MIN_ANSWER} characters).`;
+  if (!d.timeline) e.timeline = "Please choose a timeline.";
+  if (!d.data) e.data = "Please choose an option.";
+  return e;
+}
+
+// Label text with a required (*) or optional mark
+const Label = ({ text, required }: { text: string; required?: boolean }) => (
+  <span>
+    {text} {required ? <b className="quote-req" aria-hidden="true">*</b> : <em>(optional)</em>}
+  </span>
+);
+
+const FieldError = ({ name, errors }: { name: string; errors: Errors }) =>
+  errors[name] ? (
+    <small className="quote-field-error" id={`quote-${name}-error`}>
+      {errors[name]}
+    </small>
+  ) : null;
 
 // The form itself, mounted once in MainContainer
 export const QuoteModal = () => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
+  const [errors, setErrors] = useState<Errors>({});
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Freeze the page scroll while the form is open, and close it with Escape
@@ -48,8 +83,17 @@ export const QuoteModal = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const data: Record<string, string> = {};
+    new FormData(form).forEach((v, k) => (data[k] = String(v).trim()));
+    const found = validate(data);
+    setErrors(found);
+    const first = Object.keys(found)[0];
+    if (first) {
+      form.querySelector<HTMLElement>(`[name='${first}']`)?.focus();
+      return;
+    }
     setStatus("sending");
-    const data = Object.fromEntries(new FormData(e.currentTarget).entries());
     try {
       const res = await fetch("/api/quote", {
         method: "POST",
@@ -89,53 +133,65 @@ export const QuoteModal = () => {
             </button>
           </div>
         ) : (
-          <form onSubmit={onSubmit}>
+          <form
+            onSubmit={onSubmit}
+            noValidate
+            onInput={(e) => {
+              const name = (e.target as HTMLInputElement).name;
+              if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
+            }}
+          >
             <h3 id="quote-title">Get a quote for your AI project</h3>
             <p className="quote-intro">
               Four business questions, no technical knowledge needed. I'll turn your answers into an
               architecture, a timeline and a cost estimate.
             </p>
+            <p className="quote-legend">
+              Fields marked <b className="quote-req">*</b> are required.
+            </p>
 
             <div className="quote-row">
               <label>
-                <span>Name</span>
-                <input name="name" required maxLength={80} autoComplete="name" />
+                <Label text="Name" required />
+                <input name="name" maxLength={80} autoComplete="name" aria-required="true" aria-invalid={!!errors.name} aria-describedby={errors.name ? "quote-name-error" : undefined} />
+                <FieldError name="name" errors={errors} />
               </label>
               <label>
-                <span>Email</span>
-                <input name="email" type="email" required maxLength={120} autoComplete="email" />
+                <Label text="Email" required />
+                <input name="email" type="email" maxLength={120} autoComplete="email" aria-required="true" aria-invalid={!!errors.email} aria-describedby={errors.email ? "quote-email-error" : undefined} />
+                <FieldError name="email" errors={errors} />
               </label>
             </div>
             <label>
-              <span>
-                Company <em>(optional)</em>
-              </span>
+              <Label text="Company" />
               <input name="company" maxLength={100} autoComplete="organization" />
             </label>
 
             <label>
-              <span>1. What is the main goal you want to achieve with AI?</span>
+              <Label text="1. What is the main goal you want to achieve with AI?" required />
               <textarea
                 name="goal"
-                required
+                aria-required="true" aria-invalid={!!errors.goal} aria-describedby={errors.goal ? "quote-goal-error" : undefined}
                 maxLength={1000}
                 rows={3}
                 placeholder="e.g. Our technicians waste hours searching through equipment manuals."
               />
+              <FieldError name="goal" errors={errors} />
             </label>
             <label>
-              <span>2. What concrete results do you expect to see day to day?</span>
+              <Label text="2. What concrete results do you expect to see day to day?" required />
               <textarea
                 name="results"
-                required
+                aria-required="true" aria-invalid={!!errors.results} aria-describedby={errors.results ? "quote-results-error" : undefined}
                 maxLength={1000}
                 rows={3}
                 placeholder="e.g. Get the right answer, with the manual page, in seconds."
               />
+              <FieldError name="results" errors={errors} />
             </label>
             <label>
-              <span>3. What is your ideal timeline to have it running?</span>
-              <select name="timeline" required defaultValue="">
+              <Label text="3. What is your ideal timeline to have it running?" required />
+              <select name="timeline" defaultValue="" aria-required="true" aria-invalid={!!errors.timeline} aria-describedby={errors.timeline ? "quote-timeline-error" : undefined}>
                 <option value="" disabled>
                   Choose one
                 </option>
@@ -144,10 +200,11 @@ export const QuoteModal = () => {
                 <option value="3-6-months">3 to 6 months</option>
                 <option value="flexible">Flexible / not sure</option>
               </select>
+              <FieldError name="timeline" errors={errors} />
             </label>
             <label>
-              <span>4. Is your data already organized (manuals, PDFs, databases)?</span>
-              <select name="data" required defaultValue="">
+              <Label text="4. Is your data already organized (manuals, PDFs, databases)?" required />
+              <select name="data" defaultValue="" aria-required="true" aria-invalid={!!errors.data} aria-describedby={errors.data ? "quote-data-error" : undefined}>
                 <option value="" disabled>
                   Choose one
                 </option>
@@ -156,11 +213,10 @@ export const QuoteModal = () => {
                 <option value="needs-help">No, we'll need help with that</option>
                 <option value="unsure">Not sure</option>
               </select>
+              <FieldError name="data" errors={errors} />
             </label>
             <label>
-              <span>
-                Anything else about your data? <em>(optional)</em>
-              </span>
+              <Label text="Anything else about your data?" />
               <input
                 name="dataDetail"
                 maxLength={500}

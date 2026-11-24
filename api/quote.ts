@@ -67,8 +67,9 @@ export async function POST(request: Request) {
   const data = DATA_STATES[line(body.data, 30)];
   const dataDetail = text(body.dataDetail, 500);
 
-  const emailOk = /^[^\s]+@[^\s]+\.[^\s]+$/.test(email);
-  if (!name || !emailOk || !goal || !results || !timeline || !data) {
+  // Same rules as the form (src/components/QuoteForm.tsx)
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  if (name.length < 2 || !emailOk || goal.length < 10 || results.length < 10 || !timeline || !data) {
     return json(400, { ok: false, error: "invalid" });
   }
 
