@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MdArrowOutward, MdClose } from "react-icons/md";
+import { MdArrowOutward, MdAutoAwesome } from "react-icons/md";
 import { openQuoteForm } from "./utils/quoteForm";
 import "./styles/QuoteBubble.css";
 
@@ -9,9 +9,9 @@ const GAP_MS = 5000; // time hidden between appearances
 const TIMES = 3; // appearances per round
 const INTRO_FALLBACK_MS = 6000; // start even if the lights-on intro never signals
 
-// Floating speech bubble, bottom right. While the visitor is on the hero (landing) it slides in
-// from the right, stays 5 s, slides out, and repeats every 5 s up to 3 times. After leaving the
-// hero and coming back to the top, a new round of 3 starts.
+// Quote tab docked at the bottom-right edge. While the visitor is on the hero (landing) its message
+// slides out to the left, stays 5 s, slides back in, and repeats every 5 s up to 3 times. After
+// leaving the hero and coming back to the top, a new round of 3 starts.
 const QuoteBubble = () => {
   const [visible, setVisible] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -92,38 +92,37 @@ const QuoteBubble = () => {
     };
   }, []);
 
-  const dismiss = () => {
+  const stopRound = () => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
-    setVisible(false); // no more this round; a new round starts after leaving and returning to the hero
+    setVisible(false); // a new round starts after leaving and returning to the hero
   };
 
+  const open = () => {
+    stopRound();
+    openQuoteForm("bubble");
+  };
+
+  // A small tab always docked at the bottom-right edge; the message slides out of it and back in
   return (
-    <div className={`quote-bubble ${visible ? "is-visible" : ""}`} aria-hidden={!visible}>
+    <div className={`quote-dock ${visible ? "is-open" : ""}`}>
       <button
-        className="quote-bubble-main"
-        onClick={() => {
-          dismiss();
-          openQuoteForm("bubble");
-        }}
+        className="quote-dock-message"
+        onClick={open}
         tabIndex={visible ? 0 : -1}
+        aria-hidden={!visible}
         data-cursor="disable"
       >
-        <span className="quote-bubble-avatar" aria-hidden="true">
-          IG
-        </span>
-        <span className="quote-bubble-text">
-          Get a quote for your AI project <MdArrowOutward />
-        </span>
+        Get a quote for your AI project <MdArrowOutward />
       </button>
       <button
-        className="quote-bubble-close"
-        onClick={dismiss}
-        aria-label="Hide message"
-        tabIndex={visible ? 0 : -1}
+        className="quote-dock-tab"
+        onClick={open}
+        aria-label="Get a quote for your AI project"
+        title="Get a quote for your AI project"
         data-cursor="disable"
       >
-        <MdClose />
+        <MdAutoAwesome />
       </button>
     </div>
   );
