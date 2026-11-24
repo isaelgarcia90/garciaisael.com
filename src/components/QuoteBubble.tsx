@@ -1,87 +1,120 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdArrowOutward, MdClose } from "react-icons/md";
 import { openQuoteForm } from "./utils/quoteForm";
 import "./styles/QuoteBubble.css";
 
-const DISMISS_KEY = "quote-bubble-dismissed";
+const FIRST_DELAY_MS = 1500; // pause before the first appearance
+const SHOW_MS = 5000; // time on screen each time
+const GAP_MS = 5000; // time hidden between appearances
+const TIMES = 3; // appearances per round
+const INTRO_FALLBACK_MS = 6000; // start even if the lights-on intro never signals
 
-const wasDismissed = () => {
-  try {
-    return sessionStorage.getItem(DISMISS_KEY) === "1";
-  } catch {
-    return false;
-  }
-};
-
-// Speech bubble next to the character's head on the landing screen:
-// shows "typing" dots, then "Get a quote for your AI project". Hidden once the visitor scrolls down.
+// Floating speech bubble, bottom right. While the visitor is on the hero (landing) it slides in
+// from the right, stays 5 s, slides out, and repeats every 5 s up to 3 times. After leaving the
+// hero and coming back to the top, a new round of 3 starts.
 const QuoteBubble = () => {
-  const [ready, setReady] = useState(false); // intro finished + small delay
-  const [typing, setTyping] = useState(true);
-  const [atTop, setAtTop] = useState(true);
-  const [dismissed, setDismissed] = useState(wasDismissed);
+  const [visible, setVisible] = useState(false);
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const state = useRef({ introReady: false, inHero: true, roundStarted: false, leftHero: false });
 
-  // Wait for the lights-on intro (body.intro-done), then a pause before "speaking"
   useEffect(() => {
-    let t1: ReturnType<typeof setTimeout>, t2: ReturnType<typeof setTimeout>;
-    const start = () => {
-      t1 = setTimeout(() => setReady(true), 2200);
-      t2 = setTimeout(() => setTyping(false), 3600);
+    const s = state.current;
+
+    const clearTimers = () => {
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
     };
-    if (document.body.classList.contains("intro-done")) {
-      start();
-      return () => (clearTimeout(t1), clearTimeout(t2));
-    }
-    const mo = new MutationObserver(() => {
-      if (document.body.classList.contains("intro-done")) {
-        mo.disconnect();
-        start();
+    const later = (fn: () => void, ms: number) => timers.current.push(setTimeout(fn, ms));
+
+    const runRound = () => {
+      clearTimers();
+      setVisible(false);
+      let shown = 0;
+      const show = () => {
+        setVisible(true);
+        shown += 1;
+        later(() => {
+          setVisible(false);
+          if (shown < TIMES) later(show, GAP_MS);
+        }, SHOW_MS);
+      };
+      later(show, FIRST_DELAY_MS);
+    };
+
+    const maybeStart = () => {
+      if (!s.introReady || !s.inHero) return;
+      if (!s.roundStarted || s.leftHero) {
+        s.roundStarted = true;
+        s.leftHero = false;
+        runRound();
       }
+    };
+
+    // 1. Wait for the page intro (body.intro-done), with a time fallback
+    const onIntro = () => {
+      if (s.introReady) return;
+      s.introReady = true;
+      maybeStart();
+    };
+    const mo = new MutationObserver(() => {
+      if (document.body.classList.contains("intro-done")) onIntro();
     });
     mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
-    return () => (mo.disconnect(), clearTimeout(t1), clearTimeout(t2));
+    if (document.body.classList.contains("intro-done")) onIntro();
+    const fallback = setTimeout(onIntro, INTRO_FALLBACK_MS);
+
+    // 2. Track whether the hero is on screen (at least half of it)
+    const hero = document.getElementById("landingDiv");
+    const io = hero
+      ? new IntersectionObserver(
+          ([entry]) => {
+            const inHero = entry.intersectionRatio >= 0.5;
+            if (inHero === s.inHero) return;
+            s.inHero = inHero;
+            if (inHero) {
+              maybeStart();
+            } else {
+              clearTimers();
+              setVisible(false);
+              if (s.roundStarted) s.leftHero = true;
+            }
+          },
+          { threshold: [0, 0.5, 1] }
+        )
+      : null;
+    if (hero && io) io.observe(hero);
+
+    return () => {
+      mo.disconnect();
+      io?.disconnect();
+      clearTimeout(fallback);
+      clearTimers();
+    };
   }, []);
-
-  // Only on the landing screen: hide after scrolling a third of the screen
-  useEffect(() => {
-    const onScroll = () => setAtTop(window.scrollY < window.innerHeight * 0.3);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  if (dismissed) return null;
-
-  const visible = ready && atTop;
 
   const dismiss = () => {
-    setDismissed(true);
-    try {
-      sessionStorage.setItem(DISMISS_KEY, "1");
-    } catch {
-      // storage blocked: hide for this page view only
-    }
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    setVisible(false); // no more this round; a new round starts after leaving and returning to the hero
   };
 
   return (
     <div className={`quote-bubble ${visible ? "is-visible" : ""}`} aria-hidden={!visible}>
       <button
         className="quote-bubble-main"
-        onClick={() => openQuoteForm("bubble")}
+        onClick={() => {
+          dismiss();
+          openQuoteForm("bubble");
+        }}
         tabIndex={visible ? 0 : -1}
         data-cursor="disable"
       >
-        {typing ? (
-          <span className="quote-bubble-dots" aria-label="typing">
-            <i />
-            <i />
-            <i />
-          </span>
-        ) : (
-          <span className="quote-bubble-text">
-            Get a quote for your AI project <MdArrowOutward />
-          </span>
-        )}
+        <span className="quote-bubble-avatar" aria-hidden="true">
+          IG
+        </span>
+        <span className="quote-bubble-text">
+          Get a quote for your AI project <MdArrowOutward />
+        </span>
       </button>
       <button
         className="quote-bubble-close"

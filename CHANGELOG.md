@@ -10,7 +10,7 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 ## [PR #14] Formulario "Get a quote for your AI project" (24 nov 2026)
 
-- En la portada, el personaje "dice" **Get a quote for your AI project** en una burbuja de diálogo: aparece 2 s después de que se encienden las luces, primero con puntos de "escribiendo" y luego el texto. Al hacer clic abre el formulario. Se oculta al bajar de la portada, y con la X se cierra durante esa visita (`src/components/QuoteBubble.tsx`).
+- En la portada aparece una **burbuja flotante abajo a la derecha** con "Get a quote for your AI project": entra deslizándose de derecha a izquierda, se queda 5 s, sale, y vuelve cada 5 s hasta 3 veces. Si el visitante sale de la portada y regresa arriba, empieza otra ronda de 3. Al hacer clic abre el formulario; la X la cierra hasta la siguiente ronda (`src/components/QuoteBubble.tsx`).
 - También hay un bloque **Work with me** al inicio de la sección Contact, con el mismo botón.
 - El botón abre un formulario (ventana sobre la página) con nombre, correo, empresa opcional y las 4 preguntas de negocio: objetivo principal, resultados esperados en el día a día, plazo ideal (lista) y si los datos ya están organizados (lista, con detalle opcional).
 - Las respuestas llegan a Discord con la nueva función `api/quote.ts`. Usa `DISCORD_QUOTE_WEBHOOK_URL` si existe (para un canal #cotizaciones aparte) y si no, el mismo `DISCORD_WEBHOOK_URL` de las visitas.
