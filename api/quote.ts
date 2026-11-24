@@ -5,7 +5,7 @@ declare const process: { env: Record<string, string | undefined> };
 
 const ALLOWED_HOSTS = ["garciaisael.com", "www.garciaisael.com"];
 // Vercel preview deployments of this project
-const PREVIEW_HOST = /^garciaisael-com-[a-z0-9-]+-isaels-projects-af560b54\.vercel\.app$/;
+const PREVIEW_HOST = /^garciaisael-?com-[a-z0-9-]+-isaels-projects-af560b54\.vercel\.app$/;
 
 const TIMELINES: Record<string, string> = {
   "under-1-month": "Menos de 1 mes",
