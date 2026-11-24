@@ -3,11 +3,10 @@ import { MdArrowOutward, MdAutoAwesome } from "react-icons/md";
 import { openQuoteForm } from "./utils/quoteForm";
 import "./styles/QuoteBubble.css";
 
-const FIRST_DELAY_MS = 1500; // pause before the first appearance
+const FIRST_DELAY_MS = 1500; // pause after the scene lights turn on before the first appearance
 const SHOW_MS = 5000; // time on screen each time
 const GAP_MS = 5000; // time hidden between appearances
 const TIMES = 3; // appearances per round
-const INTRO_FALLBACK_MS = 6000; // start even if the lights-on intro never signals
 const IDLE_RESET_MS = 10000; // after a round, show the QUOTE tab, then start a new round
 
 // Quote tab docked at the bottom-right edge. After the page intro, its message slides out to the
@@ -53,7 +52,7 @@ const QuoteBubble = () => {
       later(show, FIRST_DELAY_MS);
     };
 
-    // 1. First round after the page intro (body.intro-done), with a time fallback
+    // 1. First round only once the scene lights turn on (initialFX adds body.intro-done)
     const onIntro = () => {
       if (s.introReady) return;
       s.introReady = true;
@@ -64,7 +63,6 @@ const QuoteBubble = () => {
     });
     mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
     if (document.body.classList.contains("intro-done")) onIntro();
-    const fallback = setTimeout(onIntro, INTRO_FALLBACK_MS);
 
     // 2. New round each time the visitor comes back to the top (the hero) after leaving it
     const hero = document.getElementById("landingDiv");
@@ -87,7 +85,6 @@ const QuoteBubble = () => {
     return () => {
       mo.disconnect();
       io?.disconnect();
-      clearTimeout(fallback);
       clearTimers();
     };
   }, []);
