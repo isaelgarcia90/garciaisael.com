@@ -29,7 +29,6 @@
 /* Between rounds: "QUOTE" written vertically, one letter per line */
 .quote-dock.is-idle .quote-dock-tab {
   height: calc(var(--dockH) * 3.1);
-  background: var(--accentLight); /* lighter tint of the active theme */
 }
 .quote-dock-word {
   display: flex;
