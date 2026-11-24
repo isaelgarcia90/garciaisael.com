@@ -9,13 +9,14 @@ const GAP_MS = 5000; // time hidden between appearances
 const TIMES = 3; // appearances per round
 const INTRO_FALLBACK_MS = 6000; // start even if the lights-on intro never signals
 
-// Quote tab docked at the bottom-right edge. While the visitor is on the hero (landing) its message
-// slides out to the left, stays 5 s, slides back in, and repeats every 5 s up to 3 times. After
-// leaving the hero and coming back to the top, a new round of 3 starts.
+// Quote tab docked at the bottom-right edge. After the page intro, its message slides out to the
+// left, stays 5 s, slides back in, and repeats every 5 s up to 3 times, on a timer only (scrolling
+// or clicking around doesn't pause it). Each time the visitor leaves the hero and comes back to the
+// top, a new round of 3 starts if the previous one has finished.
 const QuoteBubble = () => {
   const [visible, setVisible] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const state = useRef({ introReady: false, inHero: true, roundStarted: false, leftHero: false });
+  const state = useRef({ introReady: false, running: false });
 
   useEffect(() => {
     const s = state.current;
@@ -27,8 +28,9 @@ const QuoteBubble = () => {
     const later = (fn: () => void, ms: number) => timers.current.push(setTimeout(fn, ms));
 
     const runRound = () => {
+      if (s.running) return;
+      s.running = true;
       clearTimers();
-      setVisible(false);
       let shown = 0;
       const show = () => {
         setVisible(true);
@@ -36,25 +38,17 @@ const QuoteBubble = () => {
         later(() => {
           setVisible(false);
           if (shown < TIMES) later(show, GAP_MS);
+          else s.running = false;
         }, SHOW_MS);
       };
       later(show, FIRST_DELAY_MS);
     };
 
-    const maybeStart = () => {
-      if (!s.introReady || !s.inHero) return;
-      if (!s.roundStarted || s.leftHero) {
-        s.roundStarted = true;
-        s.leftHero = false;
-        runRound();
-      }
-    };
-
-    // 1. Wait for the page intro (body.intro-done), with a time fallback
+    // 1. First round after the page intro (body.intro-done), with a time fallback
     const onIntro = () => {
       if (s.introReady) return;
       s.introReady = true;
-      maybeStart();
+      runRound();
     };
     const mo = new MutationObserver(() => {
       if (document.body.classList.contains("intro-done")) onIntro();
@@ -63,20 +57,17 @@ const QuoteBubble = () => {
     if (document.body.classList.contains("intro-done")) onIntro();
     const fallback = setTimeout(onIntro, INTRO_FALLBACK_MS);
 
-    // 2. Track whether the hero is on screen (at least half of it)
+    // 2. New round each time the visitor comes back to the top (the hero) after leaving it
     const hero = document.getElementById("landingDiv");
+    let leftHero = false;
     const io = hero
       ? new IntersectionObserver(
           ([entry]) => {
             const inHero = entry.intersectionRatio >= 0.5;
-            if (inHero === s.inHero) return;
-            s.inHero = inHero;
-            if (inHero) {
-              maybeStart();
-            } else {
-              clearTimers();
-              setVisible(false);
-              if (s.roundStarted) s.leftHero = true;
+            if (!inHero) leftHero = true;
+            else if (leftHero && s.introReady) {
+              leftHero = false;
+              runRound();
             }
           },
           { threshold: [0, 0.5, 1] }
@@ -95,7 +86,8 @@ const QuoteBubble = () => {
   const stopRound = () => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
-    setVisible(false); // a new round starts after leaving and returning to the hero
+    state.current.running = false;
+    setVisible(false); // a new round starts the next time the visitor comes back to the top
   };
 
   const open = () => {
