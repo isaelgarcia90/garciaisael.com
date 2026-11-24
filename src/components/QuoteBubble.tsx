@@ -8,13 +8,17 @@ const SHOW_MS = 5000; // time on screen each time
 const GAP_MS = 5000; // time hidden between appearances
 const TIMES = 3; // appearances per round
 const INTRO_FALLBACK_MS = 6000; // start even if the lights-on intro never signals
+const IDLE_RESET_MS = 10000; // after a round, show the QUOTE tab, then start a new round
 
 // Quote tab docked at the bottom-right edge. After the page intro, its message slides out to the
 // left, stays 5 s, slides back in, and repeats every 5 s up to 3 times, on a timer only (scrolling
 // or clicking around doesn't pause it). Each time the visitor leaves the hero and comes back to the
-// top, a new round of 3 starts if the previous one has finished.
+// top, a new round of 3 starts if the previous one has finished. Between rounds the tab shows
+// "QUOTE" written vertically; if the visitor doesn't go back to the top within 10 s, a new round
+// starts on its own.
 const QuoteBubble = () => {
   const [visible, setVisible] = useState(false);
+  const [idle, setIdle] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const state = useRef({ introReady: false, running: false });
 
@@ -31,6 +35,7 @@ const QuoteBubble = () => {
       if (s.running) return;
       s.running = true;
       clearTimers();
+      setIdle(false);
       let shown = 0;
       const show = () => {
         setVisible(true);
@@ -38,7 +43,11 @@ const QuoteBubble = () => {
         later(() => {
           setVisible(false);
           if (shown < TIMES) later(show, GAP_MS);
-          else s.running = false;
+          else {
+            s.running = false;
+            setIdle(true);
+            later(runRound, IDLE_RESET_MS);
+          }
         }, SHOW_MS);
       };
       later(show, FIRST_DELAY_MS);
@@ -87,7 +96,8 @@ const QuoteBubble = () => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
     state.current.running = false;
-    setVisible(false); // a new round starts the next time the visitor comes back to the top
+    setVisible(false);
+    setIdle(true); // a new round starts the next time the visitor comes back to the top
   };
 
   const open = () => {
@@ -97,7 +107,7 @@ const QuoteBubble = () => {
 
   // A small tab always docked at the bottom-right edge; the message slides out of it and back in
   return (
-    <div className={`quote-dock ${visible ? "is-open" : ""}`}>
+    <div className={`quote-dock ${visible ? "is-open" : ""} ${idle ? "is-idle" : ""}`}>
       <button
         className="quote-dock-message"
         onClick={open}
@@ -114,7 +124,15 @@ const QuoteBubble = () => {
         title="Get a quote for your AI project"
         data-cursor="disable"
       >
-        <MdAutoAwesome />
+        {idle ? (
+          <span className="quote-dock-word" aria-hidden="true">
+            {"QUOTE".split("").map((c) => (
+              <span key={c}>{c}</span>
+            ))}
+          </span>
+        ) : (
+          <MdAutoAwesome />
+        )}
       </button>
     </div>
   );

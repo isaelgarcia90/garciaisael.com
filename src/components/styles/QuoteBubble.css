@@ -7,8 +7,7 @@
   right: 0;
   bottom: 40px;
   display: flex;
-  align-items: stretch;
-  height: var(--dockH);
+  align-items: flex-end;
 }
 
 .quote-dock-tab {
@@ -17,6 +16,7 @@
   display: grid;
   place-items: center;
   width: var(--dockH);
+  height: var(--dockH);
   font-size: 22px;
   color: var(--backgroundColor);
   background: var(--accentColor);
@@ -24,7 +24,25 @@
   border-radius: 14px 0 0 14px;
   box-shadow: 0 8px 24px rgba(var(--accentRgb), 0.35);
   cursor: pointer;
-  transition: border-radius 0.3s ease, filter 0.2s ease;
+  transition: border-radius 0.3s ease, filter 0.2s ease, height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Between rounds: "QUOTE" written vertically, one letter per line */
+.quote-dock.is-idle .quote-dock-tab {
+  height: calc(var(--dockH) * 3.1);
+}
+.quote-dock-word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(var(--dockH) * 0.3);
+  font-weight: 700;
+  line-height: 1.12;
+  animation: quoteWordIn 0.4s ease both;
+}
+@keyframes quoteWordIn {
+  from {
+    opacity: 0;
+  }
 }
 .quote-dock-tab:hover {
   filter: brightness(1.1);
@@ -37,9 +55,9 @@
 .quote-dock-message {
   position: absolute;
   z-index: 1;
-  top: 0;
+  bottom: 0;
   right: var(--dockH);
-  height: 100%;
+  height: var(--dockH);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -94,6 +112,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .quote-dock-tab,
+  .quote-dock-word {
+    transition: none;
+    animation: none;
+  }
   .quote-dock-message {
     transform: none;
     transition: opacity 0.3s;
