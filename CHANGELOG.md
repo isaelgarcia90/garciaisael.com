@@ -10,12 +10,13 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 ## [PR #14] Formulario "Get a quote for your AI project" (24 nov 2026)
 
-- Nuevo bloque **Work with me** al inicio de la sección Contact, con el botón "Get a quote for your AI project".
+- En la portada, el personaje "dice" **Get a quote for your AI project** en una burbuja de diálogo: aparece 2 s después de que se encienden las luces, primero con puntos de "escribiendo" y luego el texto. Al hacer clic abre el formulario. Se oculta al bajar de la portada, y con la X se cierra durante esa visita (`src/components/QuoteBubble.tsx`).
+- También hay un bloque **Work with me** al inicio de la sección Contact, con el mismo botón.
 - El botón abre un formulario (ventana sobre la página) con nombre, correo, empresa opcional y las 4 preguntas de negocio: objetivo principal, resultados esperados en el día a día, plazo ideal (lista) y si los datos ya están organizados (lista, con detalle opcional).
 - Las respuestas llegan a Discord con la nueva función `api/quote.ts`. Usa `DISCORD_QUOTE_WEBHOOK_URL` si existe (para un canal #cotizaciones aparte) y si no, el mismo `DISCORD_WEBHOOK_URL` de las visitas.
 - Protección: solo acepta envíos desde garciaisael.com y los previews de Vercel del proyecto, valida los campos y descarta bots con un campo oculto.
-- Nuevos eventos de Google Analytics: `quote_open` y `quote_submit` (con `timeline` y `data`).
-- Archivos: `src/components/QuoteForm.tsx`, `src/components/styles/QuoteForm.css`, `api/quote.ts`, `src/components/Contact.tsx`.
+- Nuevos eventos de Google Analytics: `quote_open` (con `source`: `bubble` o `contact`) y `quote_submit` (con `timeline` y `data`).
+- Archivos: `src/components/QuoteBubble.tsx`, `src/components/QuoteForm.tsx`, `src/components/utils/quoteForm.ts`, sus estilos en `src/components/styles/`, `api/quote.ts`, `src/components/Contact.tsx`, `src/components/MainContainer.tsx`.
 
 ---
 

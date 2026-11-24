@@ -4,11 +4,13 @@ import { createPortal } from "react-dom";
 import { MdArrowOutward, MdClose } from "react-icons/md";
 import { smoother } from "./Navbar";
 import { trackEvent } from "./utils/analytics";
+import { OPEN_QUOTE_EVENT, openQuoteForm } from "./utils/quoteForm";
 import "./styles/QuoteForm.css";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-const QuoteForm = () => {
+// The form itself, mounted once in MainContainer
+export const QuoteModal = () => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -34,11 +36,15 @@ const QuoteForm = () => {
     };
   }, [open]);
 
-  const openForm = () => {
-    if (status !== "sent") setStatus("idle");
-    setOpen(true);
-    trackEvent("quote_open");
-  };
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      setStatus((s) => (s === "sent" ? s : "idle"));
+      setOpen(true);
+      trackEvent("quote_open", { source: String((e as CustomEvent).detail ?? "") });
+    };
+    window.addEventListener(OPEN_QUOTE_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_QUOTE_EVENT, onOpen);
+  }, []);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -184,18 +190,18 @@ const QuoteForm = () => {
     </div>
   );
 
-  return (
-    <>
-      <div className="quote-cta">
-        <h4>Work with me</h4>
-        <p>Building something with AI (RAG, agents, automations)? Tell me about it and get a quote.</p>
-        <button className="quote-cta-button" onClick={openForm} data-cursor="disable">
-          Get a quote for your AI project <MdArrowOutward />
-        </button>
-      </div>
-      {open && createPortal(modal, document.body)}
-    </>
-  );
+  return open ? createPortal(modal, document.body) : null;
 };
+
+// "Work with me" block in the Contact section
+const QuoteForm = () => (
+  <div className="quote-cta">
+    <h4>Work with me</h4>
+    <p>Building something with AI (RAG, agents, automations)? Tell me about it and get a quote.</p>
+    <button className="quote-cta-button" onClick={() => openQuoteForm("contact")} data-cursor="disable">
+      Get a quote for your AI project <MdArrowOutward />
+    </button>
+  </div>
+);
 
 export default QuoteForm;
