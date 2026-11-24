@@ -13,6 +13,8 @@ import { onWidthResize } from "./utils/widthResize";
 import { initialFX } from "./utils/initialFX";
 import { notifyVisit, trackSectionViews } from "./utils/analytics";
 import { MdScreenRotation } from "react-icons/md";
+import QuoteBubble from "./QuoteBubble";
+import { QuoteModal } from "./QuoteForm";
 
 const TechStack = lazy(() => import("./TechStack"));
 
@@ -78,6 +80,8 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       <Cursor />
       <Navbar />
       <SocialIcons />
+      <QuoteBubble />
+      <QuoteModal />
       {isDesktopView && children}
       <div id="smooth-wrapper">
         <div id="smooth-content">

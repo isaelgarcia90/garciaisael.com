@@ -1,4 +1,5 @@
 import { MdArrowOutward, MdCopyright } from "react-icons/md";
+import QuoteForm from "./QuoteForm";
 import "./styles/Contact.css";
 
 const Contact = () => {
@@ -6,6 +7,7 @@ const Contact = () => {
     <div className="contact-section section-container" id="contact">
       <div className="contact-container">
         <h3 className="section-title">Contact</h3>
+        <QuoteForm />
         <div className="contact-flex">
           <div className="contact-box">
             <h4>Connect</h4>

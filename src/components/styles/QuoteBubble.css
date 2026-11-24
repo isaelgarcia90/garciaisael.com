@@ -1,0 +1,133 @@
+/* Quote tab docked at the bottom-right edge of the screen.
+   The tab is always there; the message slides out of it to the left and back in. */
+.quote-dock {
+  --dockH: 52px;
+  position: fixed;
+  z-index: 50;
+  right: 0;
+  bottom: 40px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.quote-dock-tab {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: var(--dockH);
+  height: var(--dockH);
+  font-size: 22px;
+  color: var(--backgroundColor);
+  background: var(--accentColor);
+  border: none;
+  border-radius: 14px 0 0 14px;
+  box-shadow: 0 8px 24px rgba(var(--accentRgb), 0.35);
+  cursor: pointer;
+  transition: border-radius 0.3s ease, filter 0.2s ease, background-color 0.4s ease, height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Between rounds: "QUOTE" written vertically, one letter per line */
+.quote-dock.is-idle .quote-dock-tab {
+  height: calc(var(--dockH) * 3.1);
+}
+.quote-dock-word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(var(--dockH) * 0.3);
+  font-weight: 700;
+  line-height: 1.12;
+  animation: quoteWordIn 0.4s ease both;
+}
+@keyframes quoteWordIn {
+  from {
+    opacity: 0;
+  }
+}
+.quote-dock-tab:hover {
+  filter: brightness(1.1);
+}
+.quote-dock.is-open .quote-dock-tab {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.quote-dock-message {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  right: var(--dockH);
+  height: var(--dockH);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px 0 22px;
+  white-space: nowrap;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--backgroundColor);
+  background: var(--accentLight);
+  border: none;
+  border-radius: 14px 0 0 14px;
+  box-shadow: 0 8px 24px rgba(var(--accentRgb), 0.3);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(calc(100% + var(--dockH)));
+  pointer-events: none;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+}
+.quote-dock.is-open .quote-dock-message {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.quote-dock-message svg {
+  color: var(--accentDeep);
+}
+
+@media only screen and (max-width: 1024px) {
+  .quote-dock {
+    --dockH: 46px;
+    bottom: 32px;
+  }
+  .quote-dock-message {
+    font-size: 15px;
+  }
+}
+@media only screen and (max-width: 599px) {
+  .quote-dock {
+    --dockH: 42px;
+    bottom: 22px;
+  }
+  .quote-dock-tab {
+    font-size: 19px;
+    border-radius: 12px 0 0 12px;
+  }
+  .quote-dock-message {
+    padding: 0 12px 0 16px;
+    font-size: 13.5px;
+    border-radius: 12px 0 0 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-dock-tab,
+  .quote-dock-word {
+    transition: none;
+    animation: none;
+  }
+  .quote-dock-message {
+    transform: none;
+    transition: opacity 0.3s;
+  }
+}
+
+/* Hidden while the dark silhouette shows; appears with the menu when the lights turn on */
+body:not(.intro-done) .quote-dock {
+  opacity: 0;
+  pointer-events: none;
+}
+.quote-dock {
+  transition: opacity 0.6s ease;
+}

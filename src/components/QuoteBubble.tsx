@@ -1,0 +1,138 @@
+import { useEffect, useRef, useState } from "react";
+import { MdArrowOutward, MdAutoAwesome } from "react-icons/md";
+import { openQuoteForm } from "./utils/quoteForm";
+import "./styles/QuoteBubble.css";
+
+const FIRST_DELAY_MS = 1500; // pause after the scene lights turn on before the first appearance
+const SHOW_MS = 5000; // time on screen each time
+const GAP_MS = 5000; // time hidden between appearances
+const TIMES = 3; // appearances per round
+const IDLE_RESET_MS = 10000; // after a round, show the QUOTE tab, then start a new round
+
+// Quote tab docked at the bottom-right edge. After the page intro, its message slides out to the
+// left, stays 5 s, slides back in, and repeats every 5 s up to 3 times, on a timer only (scrolling
+// or clicking around doesn't pause it). Each time the visitor leaves the hero and comes back to the
+// top, a new round of 3 starts if the previous one has finished. Between rounds the tab shows
+// "QUOTE" written vertically; if the visitor doesn't go back to the top within 10 s, a new round
+// starts on its own.
+const QuoteBubble = () => {
+  const [visible, setVisible] = useState(false);
+  const [idle, setIdle] = useState(false);
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const state = useRef({ introReady: false, running: false });
+
+  useEffect(() => {
+    const s = state.current;
+
+    const clearTimers = () => {
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
+    };
+    const later = (fn: () => void, ms: number) => timers.current.push(setTimeout(fn, ms));
+
+    const runRound = () => {
+      if (s.running) return;
+      s.running = true;
+      clearTimers();
+      setIdle(false);
+      let shown = 0;
+      const show = () => {
+        setVisible(true);
+        shown += 1;
+        later(() => {
+          setVisible(false);
+          if (shown < TIMES) later(show, GAP_MS);
+          else {
+            s.running = false;
+            setIdle(true);
+            later(runRound, IDLE_RESET_MS);
+          }
+        }, SHOW_MS);
+      };
+      later(show, FIRST_DELAY_MS);
+    };
+
+    // 1. First round only once the scene lights turn on (initialFX adds body.intro-done)
+    const onIntro = () => {
+      if (s.introReady) return;
+      s.introReady = true;
+      runRound();
+    };
+    const mo = new MutationObserver(() => {
+      if (document.body.classList.contains("intro-done")) onIntro();
+    });
+    mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    if (document.body.classList.contains("intro-done")) onIntro();
+
+    // 2. New round each time the visitor comes back to the top (the hero) after leaving it
+    const hero = document.getElementById("landingDiv");
+    let leftHero = false;
+    const io = hero
+      ? new IntersectionObserver(
+          ([entry]) => {
+            const inHero = entry.intersectionRatio >= 0.5;
+            if (!inHero) leftHero = true;
+            else if (leftHero && s.introReady) {
+              leftHero = false;
+              runRound();
+            }
+          },
+          { threshold: [0, 0.5, 1] }
+        )
+      : null;
+    if (hero && io) io.observe(hero);
+
+    return () => {
+      mo.disconnect();
+      io?.disconnect();
+      clearTimers();
+    };
+  }, []);
+
+  const stopRound = () => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    state.current.running = false;
+    setVisible(false);
+    setIdle(true); // a new round starts the next time the visitor comes back to the top
+  };
+
+  const open = () => {
+    stopRound();
+    openQuoteForm("bubble");
+  };
+
+  // A small tab always docked at the bottom-right edge; the message slides out of it and back in
+  return (
+    <div className={`quote-dock ${visible ? "is-open" : ""} ${idle ? "is-idle" : ""}`}>
+      <button
+        className="quote-dock-message"
+        onClick={open}
+        tabIndex={visible ? 0 : -1}
+        aria-hidden={!visible}
+        data-cursor="disable"
+      >
+        Get a quote for your AI project <MdArrowOutward />
+      </button>
+      <button
+        className="quote-dock-tab"
+        onClick={open}
+        aria-label="Get a quote for your AI project"
+        title="Get a quote for your AI project"
+        data-cursor="disable"
+      >
+        {idle ? (
+          <span className="quote-dock-word" aria-hidden="true">
+            {"QUOTE".split("").map((c) => (
+              <span key={c}>{c}</span>
+            ))}
+          </span>
+        ) : (
+          <MdAutoAwesome />
+        )}
+      </button>
+    </div>
+  );
+};
+
+export default QuoteBubble;
