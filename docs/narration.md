@@ -5,7 +5,7 @@ The "Listen" button next to the color mode menu plays a narrated tour, one clip 
 - Audio: `public/audio/narration-1.mp3` … `narration-6.mp3` (Landing, About, What I do, Career, My work, Contact).
 - Generated once with ElevenLabs: voice "Luis Guillermo" (`gwk2CKlAQ1B4a2RPxJoF`, native Mexican Spanish voice from the ElevenLabs library, reading English), model `eleven_v3`, `mp3_44100_128`, stability 0.5 ("Natural"). Each script is sent with the audio tag `[strong Mexican Spanish accent] ` in front, so the English sounds clearly Mexican and not native. The scripts are written in simple B2-level English.
 - The API key is never used by the site and never goes in the repo or Vercel.
-- To change a clip: regenerate it with the same settings, replace the file, and bump `ASSET_VERSION` in `src/assetVersion.ts` (audio is cached for a year).
+- To change a clip: regenerate it with the same settings, replace the file, and bump `AUDIO_VERSION` in `src/components/NarrationButton.tsx` (audio is cached for a year).
 
 ## Scripts
 ### 1. Landing (~22 s)

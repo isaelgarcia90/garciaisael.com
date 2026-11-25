@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { TbHeadphones, TbPlayerPauseFilled } from "react-icons/tb";
 import { smoother } from "./Navbar";
 import { trackEvent } from "./utils/analytics";
-import { asset } from "../assetVersion";
 import "./styles/NarrationButton.css";
 
 // One narration clip per section, in page order. The audio was generated once
 // with ElevenLabs (voice "Luis Guillermo", gwk2CKlAQ1B4a2RPxJoF, model eleven_v3) and ships as static files, so no API key is
 // ever used by the site. Scripts and how to regenerate: docs/narration.md.
-// If a clip is replaced, bump ASSET_VERSION (audio is cached for a year).
+// Audio is cached for a year: bump AUDIO_VERSION whenever a clip is replaced.
+const AUDIO_VERSION = "3";
 const CLIPS = [
   { selector: "#landingDiv", src: "/audio/narration-1.mp3", section: "landing" },
   { selector: "#about", src: "/audio/narration-2.mp3", section: "about" },
@@ -76,7 +76,7 @@ const NarrationButton = () => {
     const el = audio.current;
     if (!el) return;
     index.current = i;
-    el.src = asset(CLIPS[i].src);
+    el.src = `${CLIPS[i].src}?v=${AUDIO_VERSION}`;
     if (scroll) goToSection(i);
     el.play().catch(() => setPlaying(false));
   };
