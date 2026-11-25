@@ -6,7 +6,7 @@ import { asset } from "../assetVersion";
 import "./styles/NarrationButton.css";
 
 // One narration clip per section, in page order. The audio was generated once
-// with ElevenLabs (voice "Leo Moreno", 3l9iCMrNSRR0w51JvFB0) and ships as static files, so no API key is
+// with ElevenLabs (voice "Luis Guillermo", gwk2CKlAQ1B4a2RPxJoF, model eleven_v3) and ships as static files, so no API key is
 // ever used by the site. Scripts and how to regenerate: docs/narration.md.
 // If a clip is replaced, bump ASSET_VERSION (audio is cached for a year).
 const CLIPS = [
