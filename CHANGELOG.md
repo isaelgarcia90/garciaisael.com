@@ -4,7 +4,17 @@ Todos los cambios de garciaisael.com desde el primer commit (18 oct 2025), del m
 
 - Cada versión corresponde a un Pull Request (PR) o, en el sitio anterior, a una etapa de trabajo.
 - Cada commit aparece con su hash corto, su fecha y lo que cambió.
-- Total en `main`: 68 commits (54 de trabajo y 14 merges de PR).
+- Total en `main`: 70 commits (55 de trabajo y 15 merges de PR).
+
+---
+
+## [PR #15] Narración del portafolio con ElevenLabs (24 nov 2026)
+
+- **Botón "Listen"** (ícono de audífonos) junto al selector de modos de color, con el color de acento del tema. Al tocarlo narra la sección en la que estás y, al terminar cada clip, baja sola a la siguiente (con los mismos ajustes de los enlaces del menú). Tocarlo otra vez pausa; si vuelves a tocarlo en la misma sección, sigue donde se quedó. Mientras narra, el botón muestra pausa y un pulso suave (`src/components/NarrationButton.tsx`, `src/components/styles/NarrationButton.css`, `src/components/Navbar.tsx`).
+- **6 clips estáticos** en `public/audio/narration-1…6.mp3` (Landing, About, What I do, Career, My work, Contact; unos 2 min 20 s en total). Se generaron una sola vez con ElevenLabs, voz "Luis Guillermo" (`gwk2CKlAQ1B4a2RPxJoF`, voz nativa de español mexicano leyendo inglés) y modelo `eleven_v3` con la etiqueta `[strong Mexican Spanish accent]`. Los textos están en inglés sencillo, nivel B2, con acento mexicano marcado. La API key no está en el repo ni en Vercel, y las visitas no cuestan nada. Los audios no se descargan hasta que alguien toca el botón.
+- Los guiones y cómo regenerarlos están en `docs/narration.md`. Si se reemplaza un clip, hay que subir `AUDIO_VERSION` en `NarrationButton.tsx` (solo afecta a los audios, no a modelos ni imágenes).
+- `vercel.json`: `/audio/` se guarda en caché un año, como imágenes y modelos.
+- Nuevos eventos de Google Analytics: `narration_play` (con `section`, donde empezó) y `narration_complete`.
 
 ---
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import ThemeSwitcher from "./ThemeSwitcher";
+import NarrationButton from "./NarrationButton";
 import { MdClose, MdMenu } from "react-icons/md";
 import { TbNotes } from "react-icons/tb";
 import { gsap } from "gsap";
@@ -200,6 +201,7 @@ const Navbar = () => {
           </a>
           <div className="header-stack">
             <ThemeSwitcher />
+            <NarrationButton />
             <a
               href="/docs/Isael_Garcia_CV.pdf"
               className="navbar-resume"

@@ -1,0 +1,58 @@
+/* "Listen" button next to the color mode menu: plays the narrated tour */
+.narration-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--accentRgb), 0.5);
+  background: rgba(var(--accentRgb), 0.1);
+  color: var(--accentColor);
+  font-size: 17px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.narration-button:hover {
+  background: rgba(var(--accentRgb), 0.2);
+}
+.narration-button.playing {
+  background: rgba(var(--accentRgb), 0.25);
+  color: #fff;
+}
+/* Soft pulse while narrating */
+.narration-button.playing::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid var(--accentColor);
+  animation: narration-pulse 1.6s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes narration-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .narration-button.playing::after {
+    animation: none;
+  }
+}
+/* Phones */
+@media only screen and (max-width: 899px) {
+  .narration-button {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+}
